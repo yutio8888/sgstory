@@ -1,0 +1,14 @@
+[
+  {
+    "variable": "--tower-art",
+    "file": "assets/nousta-cover.png"
+  },
+  {
+    "variable": "--tower-art-past",
+    "file": "assets/nousta-past.png"
+  },
+  {
+    "variable": "--tower-art-present",
+    "file": "assets/nousta-present.png"
+  }
+]

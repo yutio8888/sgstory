@@ -16,6 +16,35 @@ if (files.length === 0) {
 const merged = files.map((f) => readFileSync(`${SRC}/${f}`, 'utf8').trimEnd()).join('\n\n') + '\n';
 writeFileSync('build/game.twee', merged, 'utf8');
 
+// Embed project artwork into the single-file build. No CDN or runtime fetch.
+const artManifestPath = 'assets/tower-art.json';
+let artworkStyles = '';
+if (existsSync(artManifestPath)) {
+	const artworks = JSON.parse(readFileSync(artManifestPath, 'utf8'));
+	if (!Array.isArray(artworks)) throw new Error('Artwork manifest must be an array');
+	// Large image data URLs exceed some browsers' custom-property token limits.
+	// Assign them directly to image properties with deterministic selectors.
+	const artTargets = {
+		'--tower-art': ['html .nousta-cover', 'linear-gradient(180deg, #0c1b2366, #0c1b2310 45%, #0c1b23bb)'],
+		'--tower-art-past': ['.tower-shell[data-era="past"] .tower-heading', 'linear-gradient(180deg, #38271a33, #60432022 30%, #302920e8)'],
+		'--tower-art-present': ['.tower-shell[data-era="present"] .tower-heading', 'linear-gradient(180deg, #101b2033, #101b2010 30%, #142326e8)']
+	};
+	const usedNames = new Set();
+	const declarations = artworks.map((art) => {
+		if (!art || typeof art.variable !== 'string' || !Object.hasOwn(artTargets, art.variable)
+			|| typeof art.file !== 'string' || !/^assets\/[a-z0-9-]+\.(png|jpg|webp)$/.test(art.file)
+			|| usedNames.has(art.variable)) throw new Error('Invalid or duplicate artwork entry');
+		usedNames.add(art.variable);
+		const data = readFileSync(art.file);
+		const extension = art.file.split('.').at(-1);
+		const mime = {png:'image/png', jpg:'image/jpeg', webp:'image/webp'}[extension];
+		console.log(`  Artwork ${art.file}: ${Math.round(data.length / 1024)} KB`);
+		const [selector, overlay] = artTargets[art.variable];
+		return `${selector} { background-image: ${overlay}, url("data:${mime};base64,${data.toString('base64')}"); }`;
+	});
+	artworkStyles = '\n\n:: 96-tower-art [stylesheet]\n' + declarations.join('\n') + '\n';
+}
+
 // ── 字体子集化（霞鹜文楷）────────────────────────────────────
 // 收集游戏全部文本字符 + ASCII + 常用符号，生成 base64 内嵌 @font-face，
 // 保持单文件 HTML 且不依赖外部 CDN。缺字体文件或 fonttools 时优雅跳过。
@@ -39,6 +68,8 @@ if (fontOK && existsSync('vendor/fonts/LXGWWenKai-Medium.ttf')) {
 } else {
 	console.warn('⚠️  vendor/fonts 缺少字体文件，使用系统字体回退');
 }
+const hasEmbeddedFonts = mergedFinal !== merged;
+mergedFinal += artworkStyles;
 writeFileSync('build/game.twee', mergedFinal, 'utf8');
 
 // 用 extwee 编译：Twee + SugarCube 格式 → 单文件 HTML
@@ -46,5 +77,5 @@ execSync(`npx extwee -c -i build/game.twee -o ${OUT} -s vendor/format.js`, {
 	stdio: 'inherit',
 });
 
-console.log(`\n✔ 编译完成：${OUT}（合并了 ${files.length} 个源文件${mergedFinal !== merged ? ' + 字体' : ''}）`);
+console.log(`\n✔ 编译完成：${OUT}（合并了 ${files.length} 个源文件${hasEmbeddedFonts ? ' + 字体' : ''}${artworkStyles ? ' + 插画' : ''}）`);
 console.log('  浏览器直接打开即可游玩；也可用 Twine 2 编辑器导入继续可视化编辑。');

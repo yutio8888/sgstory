@@ -1,10 +1,12 @@
 # 诺斯塔之塔：来源、改编与验证
 
+> 以下表格和取舍保留初版的历史说明。当前0.2.0以 [系统设计](TOWER-V2-DESIGN.md)、[叙事设计](TOWER-V2-NARRATIVE.md) 与 [当前进度](PROGRESS.md) 为准；新旧存档按规则版本分别运行。
+
 ## 来源与许可
 
 2026-09-07 阅读 Jaclyn Lewis 的 [Ascend Nousta’s Tower 发布页](https://jaclynlewis.itch.io/ascend-noustas-tower) 与作者公开的[完整双时态场景图](https://img.itch.zone/aW1nLzEzMDg5MzM4LmpwZw==/original/%2BofNtd.jpg)。该作品参加 2023 One-Page Dungeon Contest，作者按 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) 发布。没有把二手简介当作完整场景资料。
 
-`src/50-tower-data.twee` 和 `src/51-tower.twee` 中的塔篇叙事、场景、物品及改编玩法，以 CC BY-SA 4.0 提供。保留作者署名、原作链接、许可链接与本修改说明；不暗示作者为本改编背书。代码的 MIT 与原森林内容的 CC BY 4.0 保持不变。本篇不是原作逐字译本，也不是官方数字版。
+`src/48-tower-legacy.twee`、`src/49-tower-world.twee`、`src/50-tower-data.twee` 和 `src/51-tower.twee` 中的塔篇叙事、场景、物品及改编玩法，以 CC BY-SA 4.0 提供。保留作者署名、原作链接、许可链接与本修改说明；不暗示作者为本改编背书。代码的 MIT 与原森林内容的 CC BY 4.0 保持不变。本篇不是原作逐字译本，也不是官方数字版。
 
 ## 逐层对应
 

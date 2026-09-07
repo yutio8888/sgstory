@@ -1,12 +1,12 @@
 {
   "name": "sgstory",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "Twine + SugarCube 文字冒险游戏脚手架（Twee 源码 → 单文件 HTML）",
+  "description": "诺斯塔之塔：双时态叙事解谜独立游戏（SugarCube 单文件离线版）",
   "scripts": {
     "build": "node build.mjs",
-    "test": "node build.mjs && node test/rules.mjs && node test/smoke.mjs && node test/scenarios.mjs && node test/tower.mjs",
+    "test": "node build.mjs && node test/rules.mjs && node test/smoke.mjs && node test/scenarios.mjs && node test/tower.mjs && node test/tower-v2.mjs && node test/tower-ui-v2.mjs",
     "serve": "python3 -m http.server 8000 --directory dist",
     "watch": "node --watch --watch-path=src build.mjs"
   },

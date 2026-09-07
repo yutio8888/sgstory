@@ -3,8 +3,11 @@ import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 import { JSDOM, VirtualConsole } from 'jsdom';
 const ctx = vm.createContext({setup:{}});
-vm.runInContext(readFileSync('src/50-tower-data.twee','utf8').split('\n').slice(1).join('\n'),ctx);
-const {newTower,towerAct:act,towerActions:actions,towerRooms} = ctx.setup;
+// Preserve the original v1 routes against the version-dispatched engine.
+for (const file of ['48-tower-legacy.twee','49-tower-world.twee','50-tower-data.twee']) {
+ vm.runInContext(readFileSync('src/' + file,'utf8').split('\n').slice(1).join('\n'),ctx);
+}
+const {newTowerLegacy:newTower,towerAct:act,towerActions:actions,towerRoomsLegacy:towerRooms} = ctx.setup;
 const step = (s,id) => { assert(actions(s).some(a=>a.id===id), `行动不可用 ${id} @ ${s.floor}:${s.era}`); return act(s,id); };
 const route = (ids) => ids.reduce(step,newTower());
 const climb = n => Array(n).fill('up');
@@ -60,6 +63,10 @@ try {
   assert.equal(w.document.querySelectorAll('#passages .error').length,0,w.document.querySelector('#passages').textContent);
  };
  await click('探索诺斯塔之塔'); await click('快速成型'); await click('出发，前往诺斯塔之塔');
+ // Install a v1 fixture to retain all original UI scenarios; the v2 UI suite
+ // separately imports an actual portable save exported by the old build.
+ sc.State.variables.tower = sc.setup.newTowerLegacy();
+ sc.Engine.play('诺斯塔之塔'); await sleep(200);
  const pcBefore=JSON.stringify(sc.State.variables.pc);
  const uiStep=async id=>{
   const action=sc.setup.towerActions(sc.State.variables.tower).find(a=>a.id===id);

@@ -1,0 +1,33 @@
+{
+  "sourceCommit": "c1e7dae",
+  "description": "Pre-v2 SugarCube portable save at floor 4 past, book/rune/sketch learned; no new fields",
+  "state": {
+    "version": 1,
+    "floor": 3,
+    "era": "past",
+    "visited": [
+      "0:present",
+      "0:past",
+      "1:past",
+      "2:past",
+      "3:past"
+    ],
+    "notes": [
+      "养龙书：龙听得懂话。先听它怕什么，别急着命令；等它肯听，再告诉它怎样离开。",
+      "浮空符文：能让目标悬浮一分钟；可越过守卫，也可展示向上的出口。",
+      "速写：塔顶只是普通屋梁，并非囚龙的封印。"
+    ],
+    "book": true,
+    "rune": true,
+    "meal": false,
+    "guards": false,
+    "loot": false,
+    "shield": false,
+    "scroll": false,
+    "charges": 0,
+    "promise": false,
+    "ending": "",
+    "message": "你顺着图上的横梁描过去：木梁搭在石墙上，没有封印的标记。你把这处构造记下，再抬头望向楼上。"
+  },
+  "save": "N4IgLgngDgpiBcAWANCAJjAzgYwSAKgK4BOAdgAQBMIqaAhmHPAIwDsAHOx8wKyU8BmAc1QBLNHkDv8YD+0wHcWgdPMaITGAZNQo0hgAeCEehgAbVQgDaoMKLCGmIQAD6gLnUlANzrFRdAEY3MCUFEM6CBhiAH1SOgBbWyUoXHhQCOi8JWIAe0ItBAAGVChRbABrGAl4UwBdVEi0jBTUL1FDK1EsBFJCQ0NUTELGw18yypAAMxgGAYrUAHMx4jMh4cCpgeAAX2m0w1LckAALKByqum1Q/cO9ukxQsDTibF2EYbp+mFRdy9D02EfnzFflZ7OGChQh/UpPF7dWDYFqYADSMAgdWU0NhABkvEZkdhAphMBjPFj4CAlJ4pgSiST1hcrlEOjAwD9IXtZmhPoRqnN4BC/htvJpQpgoG4SkzeSAAO5We6nMY2cG/GCrdYWKw2MyUVCAL+jAPWmgBUNQDScnqQENXO4vD4/CA6GggaQwCQmKZNeA0hKQia8oFgmEkk6XYAD00AsCqAUdNAF1yntd7q5zuQoCBxEwojSpD0qEWaVuCAEqBCdDwwpULlEScYpVMIGy8CgxCwMHtSirhcZqGY1cuLZAlHbRdQAh7jKGpDSjAmIEA3oqATPzAGZygCx/yeAGhVAOn6gCHDQC70YAgBkAEooLwDB2oBUA0AA3KACTlADD/gGolQCkBoABd0AviqAE7lANj/gElvXeAeoCF6fALGKgCkVQCT0bugBwBoA7BaAN2edgbkogB2toAXl6AGTegDhprOgC/AYAldGAHdugDgFoANQZQYAAHKAGBKgD5KY+gD3yoAUbGAOPxgAR2oA1sqnoA+nKkYAqjqAFyegCIKoAUHKACFugBfioAx8qQaggD4CYAmYqznqgBuGYAV8qAPRmgB2ZoAWAmANI6gCBFqegBueoAeumAFtqk7cYAgDqAA7KkFDJ4maFAgYDEIQ/w2aQTDWbZVRymK/xTIQbhoAMPL/IYmaMtyirdLsLRbG53TYOknQRSA9xuDMAw7DWaSRCWTC+bmWiaFMyLRHidAzHggAG8oAXhnXoAf2o8YAVFaqYA88aUYA3cqzoAFOaqYAtCaABTqgDP7oAmRqcaegCFNoAkObGdxmGAA3RG7FYAUUaAJvxgAgmoAIeaAAQJE2ANBy36ADVGgAsmoA2ObsYAPpacZBqzlMq50uao9AmAkIB+ngwbhkoQowDCrTEkoOKXAMJJvAc8A7FMmzbMqQA"
+}

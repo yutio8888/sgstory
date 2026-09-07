@@ -1,0 +1,59 @@
+:: 诺斯塔旧版规则 [script]
+/* Adapted from Jaclyn Lewis, Ascend Nousta's Tower (2023), CC BY-SA 4.0.
+ * See docs/NOUSTA.md. Tower narrative/content remains CC BY-SA 4.0.
+ * State is serializable SugarCube story state; queries never mutate it. */
+setup.newTowerLegacy = () => ({version:1, floor:0, era:'present', visited:['0:present'], notes:[], book:false, rune:false, meal:false, guards:false, loot:false, shield:false, scroll:false, charges:0, promise:false, ending:'', message:'你从白骨旁拾起森图里亚之杖，掌心传来轻微的震动。转动杖头便能往返过去与现在，不限次数；随身物品与手记都会跟着你。'});
+setup.towerLegacyActions = (s) => {
+ if (s.ending) return [];
+ const a = [];
+ const add = (id,label) => a.push({id,label});
+ add('shift', s.era === 'present' ? '转动时光杖 → 过去' : '转动时光杖 → 现在');
+ if (s.floor === 1 && !s.book) add('book','研读养龙书 · 记录线索');
+ if (s.floor === 2 && !s.rune) add('rune','描摹浮空符文 · 记入手记');
+ if (s.floor === 3 && !s.notes.includes('速写：塔顶只是普通屋梁，并非囚龙的封印。')) add('sketch','辨读速写残页 · 记录塔顶构造');
+ if (s.floor === 4 && s.era === 'past' && !s.meal && !s.guards) add('meal','端起一盘热饭 · 无需金币');
+ if (s.floor === 5 && s.era === 'past' && !s.guards) {
+  if(s.meal) add('serve','送上热饭 · 安全通过守卫');
+  if(s.rune) add('float','用浮空符文越过守卫 · 不消耗物品');
+ }
+ if (s.floor === 6 && s.era === 'present' && !s.loot) add('loot','收起遗物 · 三次护符、一次卷轴与巨剑');
+ if (s.floor === 8 && s.era === 'past' && !s.shield) add('shield','取下防火盾 · 可反复使用');
+ if (s.floor === 10) {
+  if(s.era === 'past' && s.book && !s.promise) add('promise','按书中的方法安抚幼龙 · 倾听它的愿望');
+  if(s.era === 'present') {
+   if(s.book && s.promise && (s.rune || s.charges > 0)) add('free','让诺斯塔看见出口 · 结束冒险（先用符文，否则耗护符一次）');
+   if(s.shield || s.scroll) add('treasure','冒着龙火取走一袋金币 · 结束冒险（先用盾，否则消耗卷轴）');
+  }
+ }
+ const blocked = (s.floor===0 && s.era==='present') || (s.floor===5 && s.era==='past' && !s.guards) || (s.floor===9 && s.era==='past');
+ if(s.floor < 10 && !blocked) add('up','登上一层');
+ if(s.floor > 0) add('down','沿楼梯下行一层');
+ if(s.floor === 0) add('leave','带着见闻离开 · 结束冒险');
+ return a;
+};
+setup.towerLegacyAct = (state,id) => {
+ // Reject unavailable/repeated actions without changing any state.
+ if(!setup.towerLegacyActions(state).some(a=>a.id===id)) return state;
+ const s = {...state, notes:[...state.notes], visited:[...state.visited], message:''};
+ const note = text => { if(!s.notes.includes(text)) s.notes.push(text); };
+ switch(id) {
+ case 'shift': s.era = s.era === 'present' ? 'past' : 'present'; s.message='你转动杖头。脚下微微一震，墙面与门框在眼前变了模样；你仍站在这一层，行囊的重量也还在。'; break;
+ case 'up': s.floor++; break;
+ case 'down': s.floor--; break;
+ case 'book': s.book=true; note('养龙书：龙听得懂话。先听它怕什么，别急着命令；等它肯听，再告诉它怎样离开。'); s.message='你抄下几行：放低声音，等它说完。喂食记录里尽是命令，只有这页记着怎样让龙肯开口。方法已经记进手记。'; break;
+ case 'rune': s.rune=true; note('浮空符文：能让目标悬浮一分钟；可越过守卫，也可展示向上的出口。'); s.message='你沿着笔画比过一遍，低声念出咒音。衣袖离开手腕，轻轻浮起。笔顺已经记牢，这道符文可以反复使用。'; break;
+ case 'sketch': note('速写：塔顶只是普通屋梁，并非囚龙的封印。'); s.message='你顺着图上的横梁描过去：木梁搭在石墙上，没有封印的标记。你把这处构造记下，再抬头望向楼上。'; break;
+ case 'meal': s.meal=true; s.message='你端起一盘热饭。厨师忙着翻锅，只朝楼上扬了扬下巴。'; break;
+ case 'serve': s.meal=false; s.guards=true; s.message='卫兵接走热饭，横着的手臂落了下去。“送饭的，走吧。”他朝桌后偏了偏头。你被认作跑腿的人，以后也能从这里通过。'; break;
+ case 'float': s.guards=true; s.message='你的双脚离开地面。吊着的骸骨擦过衣角，争吵声留在脚下；你越过桌子落在楼梯边，松开侧梯。再来时，也能沿这条路绕过守卫。'; break;
+ case 'loot': s.loot=true; s.charges=3; s.scroll=true; s.message='你从骨指下抽出护符，三道刻痕依次亮起。卷轴卷进衣袋，巨剑沉沉压住肩膀。能用的遗物已经收好，地上只剩碎木与白骨。'; note('逆重力护符：三道刻痕，每用一次灭去一道，可向龙展示出口。防火卷轴：取宝时挡住龙火，用后耗尽。'); break;
+ case 'shield': s.shield=true; s.message='你托住盾底，将它从挂钩上抬下。皮带还结实，盾后的墙面也没被火熏黑。你把防火盾背好；它可以反复使用，也能带回现在。'; break;
+ case 'promise': s.promise=true; note('幼龙的愿望：它想离开铁钩与命令，不想再被当作兵器。'); s.message='你蹲下来，等它把话说完。它盯着你的双手，终于问：“外面也有铁钩吗？”你答应帮它离开这里。它松开紧抓木梁的爪子，肯把目光转向你了。'; break;
+ case 'free': if(!s.rune) s.charges--; s.ending='free'; s.message='你让浮尘升向屋梁，指给诺斯塔看：“往上。你已经长大了。”它认出你的声音，慢慢伸开一侧翅膀。木梁先弯，随后裂响；你伏下身，碎木擦着背包落地。再抬头时，塔顶只剩敞开的天空。那双曾紧抓木梁的爪子，终于收进飞远的影子里。'; break;
+ case 'treasure': if(!s.shield) s.scroll=false; s.ending='treasure'; s.message='你刚拢起金币，龙火就扑了过来。防护挡住灼热，你攥紧袋口退向梯子，金币一路撞得叮当响。走出塔门时，你抬头望了一眼：屋顶仍好好地盖着，里面传来鳞片刮擦木梁的声音。'; break;
+ case 'leave': s.ending='leave'; s.message='你握着杖走出塔门，靴底的泥在门槛上蹭下一道痕。外面的风吹到脸上，你才松开肩膀。塔还立在身后；这一次，你决定走到这里。'; break;
+ }
+ const key = `${s.floor}:${s.era}`;
+ if(!s.visited.includes(key)) s.visited.push(key);
+ return s;
+};

@@ -1,26 +1,30 @@
 /% ═══════════════ 主要剧情（D&D SRD 5.2 检定驱动版） ═══════════════ %/
 
 :: 开场
-<div class="title-card">
-	<h1>迷雾森林</h1>
-	<p class="subtitle">— 一段微型的文字冒险 —</p>
-	<p class="engine-credit">由 Twine + SugarCube 驱动 · 森林篇 CC BY 4.0 · 塔篇 CC BY-SA 4.0</p>
-</div>
-
-传说，边境小镇外的迷雾森林深处住着一位女巫。
-无数冒险者进去时豪情万丈，出来时……好吧，基本没人出来过。
-
-出发之前——你叫什么名字？
-
-<<textbox "$player_name" "无名旅人" autofocus>>
-
-<div class="tower-invitation">
-<h2>新冒险 · 诺斯塔之塔</h2>
-<p>废塔的石阶已经断了，塔顶却仍传来龙的呼吸。一根时光杖让你看见楼梯完好的过去——那时，龙还很小。往返两段时光，走过十一层房间，决定你与它的离去方式。本篇有三个结局，无需战斗检定。</p>
-<<link "探索诺斯塔之塔">><<set $adventure to "tower">><<goto "车卡">><</link>>
-</div>
-
+<<nobr>>
+<div class="nousta-title">
+<header class="nousta-cover">
+<p class="tower-kicker">一座塔 · 两段时光 · 你的去向</p>
+<h1>诺斯塔<br>之塔</h1>
+<p class="nousta-en">NOUSTA’S TOWER</p>
+<p class="nousta-cover-line">过去的门还没有关。<br>未来的龙还在等。</p>
+</header>
+<section class="nousta-start">
+<p class="tower-kicker">双时态探索冒险</p>
+<p>废塔的楼梯断在半空，塔顶却传来龙的呼吸。握住泥土里的时光杖，回到石阶完整的那一天。十一层房间，两段互相照见的时光：你带走的每一件东西，都可能改变上面的路。</p>
+<label>在手记扉页留下你的名字
+<<textbox "$player_name" "无名旅人">></label>
+<div class="nousta-start-link"><<link "探索诺斯塔之塔">><<set $adventure to "tower">><<goto "车卡">><</link>></div>
+<p class="nousta-small">观察 · 收集 · 改变过去 · 多种结局<br>随时存档，按自己的节奏探索。</p>
+</section>
+<details class="forest-door"><summary>另一个故事 · 迷雾森林</summary>
+<p>传说，边境小镇外的迷雾森林深处住着一位女巫。无数冒险者进去时豪情万丈，出来时……好吧，基本没人出来过。</p>
+<p>一段带有掷骰检定的微型冒险，从「歪脖子鸭」酒馆开始。</p>
 [[踏上旅途|车卡][$adventure = "forest"]]
+</details>
+<p class="nousta-credits">塔篇改编自 Jaclyn Lewis 的 Ascend Nousta’s Tower · CC BY-SA 4.0<br>森林篇 CC BY 4.0 · Twine / SugarCube</p>
+</div>
+<</nobr>>
 
 :: 酒馆
 黄昏，"歪脖子鸭"酒馆。壁炉的火光把每个人的影子都拉得老长。

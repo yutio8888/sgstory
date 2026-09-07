@@ -1,0 +1,121 @@
+npm notice run sgstory@0.2.0 test
+npm notice run node build.mjs && node test/rules.mjs && node test/smoke.mjs && node test/scenarios.mjs && node test/tower.mjs && node test/tower-v2.mjs && node test/tower-ui-v2.mjs
+  Artwork assets/nousta-cover.png: 2674 KB
+  Artwork assets/nousta-past.png: 3538 KB
+  Artwork assets/nousta-present.png: 3261 KB
+🔤 生成字体子集（LXGW WenKai）…
+  Regular: 320 KB (woff2)
+  Medium: 319 KB (woff2)
+  base64 总量: 852 KB → build/fontface.twee
+npm notice run sgstory@0.2.0 npx
+npm notice run 'extwee' -c -i build/game.twee -o dist/index.html -s vendor/format.js
+🔄 Compiling Twee to Twine 2 HTML...
+✅ Successfully compiled 'build/game.twee' to 'dist/index.html'
+
+✔ 编译完成：dist/index.html（合并了 13 个源文件 + 字体 + 插画）
+  浏览器直接打开即可游玩；也可用 Twine 2 编辑器导入继续可视化编辑。
+✓ mod(10) = 0
+✓ mod(14) = +2
+✓ mod(8) = -1
+✓ mod(16) = +3
+✓ fmod(17) 带符号
+✓ fmod(8) 负号
+✓ fmod(10) 零
+✓ 熟练察觉：感(15)+2熟练 = +4
+✓ 未熟练运动：力(8) = -1
+✓ 熟练运动：-1+2 = +1
+✓ 未熟练游说：魅(13) = +1
+✓ 常规骰 d20=11
+✓ 11+1=12 ≥ DC11 → 成功
+✓ 11+1=12 < DC13 → 失败
+✓ 优势取高
+✓ 劣势取低
+✓ 机运烙印：+1 加值（12+1=13 ≥ 13）
+✓ 修饰栈基值
+✓ 叠加修饰 10+2-1
+✓ 移除装备修饰 10-1
+✓ 自然 20 → 无视 DC 必然成功
+✓ 豁免同样适用自然 20 规则
+✓ 自然 1 → 无视加值必然失败
+✓ 车卡共 8 轮
+✓ 每轮恰好 3 个选项
+✓ 所有选项都有 apply 函数
+✓ 车卡完成 8 轮
+✓ 勇武数组：力量 15
+✓ 学者背景：智力 10+2=12
+✓ 战士 10+体(14→+2) = 12（首轮选警觉无HP加成）
+✓ 满血出场
+✓ 学者 10 + 人类 10 = 20 金币
+✓ 技能包生效
+✓ 火把与绳索行囊生效
+✓ 命运烙印生效
+✓ 三套快速预设
+✓ 每套预设覆盖全部 8 轮
+✓ 预设索引均有效
+✓ 铁卫：力 17
+✓ 铁卫：HP 14
+✓ 铁卫：佣兵金币 15
+✓ 铁卫：火把与绳索
+✓ 影手：HP 10
+✓ 影手：金币 17（修行者12+游荡者5）
+✓ 影手：机运烙印与精灵
+✓ 秘典：智 17
+✓ 秘典：HP 7（6+1）
+✓ 秘典：学识烙印与药膏
+✓ 秘典：学者/巫师重复历史技能已去重
+
+规则层测试全部通过
+✓ 开场段落渲染
+✓ 进入车卡流程
+✓ 三套预设选项卡
+✓ 预设名称渲染
+✓ 专家模式入口存在
+✓ 快速预设后直达角色卡
+✓ 角色卡显示属性表
+✓ 角色卡显示职业
+✓ 角色卡显示默认名
+✓ 预设数值生效（力17 体15）
+✓ 生命值计算正确（10+2 + 坚固2 = 14/14）
+✓ 起始金币 15（佣兵）
+✓ 背景与职业重复技能已去重
+✓ 预设行囊生效
+✓ 进入酒馆
+✓ 角色名插值
+✓ 金币插值
+✓ 已带火把 → 购买链接隐藏
+✓ 传闻链接存在
+✓ 到达森林边缘
+✓ 血条宏（$pc 版）渲染
+✓ 进入洞穴
+✓ 检定结果框渲染
+✓ 霞鹜文楷子集已内嵌（@font-face）
+✓ <<check>> 宏产出 $last_check
+✓ 页面无运行时错误
+
+冒烟测试全部通过
+✓ 路线A：火把+全检定成功 → 结局「月光倾城」
+✓ 路线B：摸黑+断桥 → 结局「空手而归」
+✓ 路线C：贿赂哥布林 → 结局「平凡之光」
+✓ 路线D：两次鲁莽挑战 → 结局「死亡」
+✓ 路线E：买火把+战斗受创 → 结局「月光倾城」
+
+全部场景通过
+✓ 送餐＋符文和平路线；结局无重复结算
+✓ 无符文护符和平路线；只消耗一次
+✓ 卷轴取宝、盾牌取宝和撤离结局
+✓ 守卫阻挡与浮空绕行；回访无法刷遗物
+✓ 22 个时态场景可达、全程可回退，序列化后可继续
+✓ 实际 HTML：车卡入口、完整和平路线、提示零消耗、存读档与回退、原角色不受影响
+✓ Three distinct nonterminal charm uses consume all charges; full liberation remains possible
+✓ Difficult route uses rope, historical drain repair and sword lever; no charm charges spent
+✓ Exhausted charm and scroll, return to base, then complete without hidden resource demand
+✓ Pact has distinct evidence/decree conditions and does not require opening the roof
+✓ Scroll and shield treasure endings plus voluntary departure
+✓ Invalid/repeated actions preserve object identity; queries are pure; rewards never refill
+✓ All 22 scenes reachable and all nonterminal rooms permit retreat and time shift
+✓ Version 2 JSON save resumes to completion; version 1 dispatch preserves original free/rune rules
+✓ Personal rune cannot bypass heavy gates; v1 hints stay on the legacy projection
+✓ Four charm uses compete for three charges; memorial forces a manual roof, survives save, and pays off in all endings
+✓ v2 compiled UI: preset entry, all three charm uses, non-consuming journal, Base64 save/load, history and liberation
+✓ v2 compiled UI: history restores the final choice and treasure ending works
+✓ real v1 Base64 fixture: complete tower state preserved, old hints/rules retained and liberation remains playable

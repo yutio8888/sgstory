@@ -4,47 +4,65 @@
 
 :: 诺斯塔之塔
 <<nobr>>
-<<set _room to setup.towerRooms[$tower.floor]>>
-<div class="tower-shell">
+<<set _rooms to $tower.version === 2 ? setup.towerRooms : setup.towerRoomsLegacy>>
+<<set _room to _rooms[$tower.floor]>>
+<div class="tower-shell" @data-era="$tower.era">
 <header class="tower-heading">
-<p class="tower-kicker">NOUSTA’S TOWER · 双时之塔</p>
-<h1><<print _room.name>></h1>
-<p class="tower-era"><<print $tower.era === 'past' ? '◈ 过去 · 哥布林占领时期' : '◇ 现在 · 荒塔遗迹'>> · <<print $tower.floor + 1>> / 11 层</p>
+<div class="tower-heading-top"><span class="tower-kicker">NOUSTA’S TOWER</span><span class="tower-floor">F<<print String($tower.floor + 1).padStart(2,'0')>> / 11</span></div>
+<div class="tower-heading-bottom"><p class="tower-era"><<print $tower.era === 'past' ? '◈ 过去 · 炉火尚未熄灭' : '◇ 现在 · 风穿过荒塔'>></p><h1><<print _room.name>></h1></div>
 </header>
+<div class="tower-statusbar" aria-label="随身资源"><span>时光杖 · 无限往返</span><<if $tower.loot>><span>护符 · 剩余 <<print $tower.charges>> / 3 次</span><</if>></div>
+<div class="tower-layout">
+<main class="tower-main">
 <<if $tower.ending>>
-<section class="ending-card">
-<h2><<print ({free:'结局 · 梁外的天空',treasure:'结局 · 满袋金币',leave:'结局 · 带回见闻'})[$tower.ending]>></h2>
+<section class="ending-card tower-ending">
+<p class="tower-kicker">旅程终章</p>
+<h2>结局 · <<print setup.towerEndingTitle($tower)>></h2>
 <p><<print $tower.message>></p>
-<p>探索了 <<print $tower.visited.length>> / 22 处过去与现在的场景，留下 <<print $tower.notes.length>> 条手记。</p>
+<p class="nousta-small">探索了 <<print $tower.visited.length>> / 22 处过去与现在的场景，留下 <<print $tower.notes.length>> 条手记。</p>
+<p class="nousta-small">这份手记仍属于你。可用侧栏回退，重访最后的选择。</p>
 </section>
 <<else>>
-<p class="tower-goal">塔顶有什么，让诺斯塔迟迟不肯离开？沿着楼梯上去，看看它的过去与现在。</p>
+<div class="tower-objective"><span class="tower-kicker">此刻的线索</span><p><<print setup.towerObjective($tower)>></p></div>
 <<if $tower.message>><p class="tower-feedback" role="status"><<print $tower.message>></p><</if>>
-<div class="tower-prose"><p><<print _room[$tower.era]>></p></div>
-<<if $tower.floor is 0 and $tower.era is 'present'>><p class="tower-warning">断口上方够不到落脚处。转动时光杖，回到石阶还完整的过去，就能上楼。</p><</if>>
-<<if $tower.floor is 5 and $tower.era is 'past' and not $tower.guards>><p class="tower-warning">守卫不让陌生人上楼。送上热饭、用浮空符文绕行，或切到现在，都能通过。</p><</if>>
-<<if $tower.floor is 9 and $tower.era is 'past'>><p class="tower-warning">驯龙者挡着梯子。你握紧仍在发光的杖：切到现在，就能绕开他们。</p><</if>>
-<<if $tower.floor is 10 and $tower.era is 'present'>><p class="tower-warning">想带它离开，需要先读养龙书，在过去赢得幼龙的信任，再用浮空符文或尚有次数的护符展示出口。若要冒着龙火取宝，需要防火盾或卷轴。两种选择都会结束这次冒险；准备不足时，可以下楼寻找，或转动杖头回到过去。</p><</if>>
+<div class="tower-prose"><p><<print setup.towerDescription($tower)>></p></div>
+<h2 class="tower-section-title">你的下一步 <span aria-hidden="true">——</span></h2>
 <nav class="tower-actions" aria-label="场景行动">
 <<for _action range setup.towerActions($tower)>>
 <<capture _action>>
+<div class="tower-action-card" @data-kind="_action.kind || 'travel'">
 <<link _action.label>><<set $tower to setup.towerAct($tower, _action.id)>><<goto "诺斯塔之塔">><</link>>
+<<if _action.cost>><p class="tower-action-cost"><<print _action.cost>></p><</if>>
+<<if _action.hint>><p class="tower-action-hint"><<print _action.hint>></p><</if>>
+</div>
 <</capture>>
 <</for>>
 </nav>
-<details class="tower-panel"><summary>需要一点提示？</summary><p><<print _room.hint>></p></details>
+<details class="tower-panel tower-hints"><summary>需要一点提示？ <span>含解谜方向</span></summary><p><<print _room.hint>></p>
+<<set _blocked to setup.towerBlocked($tower)>>
+<<if _blocked.length>><ul><<for _reason range _blocked>><li><<print _reason>></li><</for>></ul><</if>>
+</details>
 <</if>>
-<details class="tower-panel"><summary>探险手记 · <<print $tower.notes.length>> 条线索</summary>
-<<if $tower.notes.length>><ul><<for _note range $tower.notes>><li><<print _note>></li><</for>></ul><<else>><p>手记还是空白。读书或调查时，你会把找到的线索记在这里。</p><</if>>
-<p>随身物品：森图里亚之杖<<if $tower.book>>、养龙书笔记<</if>><<if $tower.rune>>、浮空符文<</if>><<if $tower.meal>>、送餐盘<</if>><<if $tower.shield>>、防火盾<</if>><<if $tower.scroll>>、防火卷轴<</if>><<if $tower.loot>>、巨剑、逆重力护符（剩 <<print $tower.charges>> 次）<</if>>。</p>
-</details>
-<details class="tower-panel"><summary>探索地图 · <<print $tower.visited.length>> / 22</summary>
-<p>你只标出了亲自到过的地方。上下楼不会改变时代；转动杖头，则留在同一层。</p>
-<ol class="tower-map"><<for _i to 0; _i lt setup.towerRooms.length; _i++>>
-<li><<if $tower.visited.includes(_i + ':past') or $tower.visited.includes(_i + ':present')>><<print setup.towerRooms[_i].name>><<else>>尚未探索<</if>> · 过去 <<print $tower.visited.includes(_i + ':past') ? '●' : '○'>> / 现在 <<print $tower.visited.includes(_i + ':present') ? '●' : '○'>></li>
+<details class="tower-panel"><summary>玩法与改编来源</summary><p>留意同一间屋子在过去与现在的不同，就能找到登塔的办法。任何角色都能走完本篇，关键线索无需掷骰；切换时代、查看手记都不扣生命或金币。物品和手记随你往返，不必重新收集。行动下方会标明代价。侧栏可以存档、读档或回退，抵达结局后也能回退尝试其他选择。</p><p>改编自 Jaclyn Lewis 的 <a href="https://jaclynlewis.itch.io/ascend-noustas-tower" target="_blank" rel="noopener noreferrer">Ascend Nousta’s Tower</a>（2023）。中文叙事、路线与结局有改写；本篇改编内容采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>。</p></details>
+<<if $tower.ending>><div class="nousta-start-link"><<link "重新开始">><<run Engine.restart()>><</link>></div><</if>>
+</main>
+<aside class="tower-journal" aria-label="探险记录">
+<details class="tower-panel tower-map-panel" open><summary>探索地图 · <<print $tower.visited.length>> / 22</summary>
+<div class="tower-map-legend"><span>楼层</span><span>过去 / 现在</span></div>
+<ol class="tower-map" reversed>
+<<for _i to _rooms.length - 1; _i gte 0; _i-->>
+<li @class="_i === $tower.floor ? 'is-current' : ''" @aria-current="_i === $tower.floor ? 'location' : 'false'">
+<span class="tower-map-number"><<print String(_i + 1).padStart(2,'0')>></span><span class="tower-map-name"><<if $tower.visited.includes(_i + ':past') or $tower.visited.includes(_i + ':present')>><<print _rooms[_i].name>><<else>>未知的房间<</if>></span><span class="tower-map-dots"><span @aria-label="$tower.visited.includes(_i + ':past') ? '过去已探索' : '过去未探索'"><<print $tower.visited.includes(_i + ':past') ? '●' : '○'>></span> <span @aria-label="$tower.visited.includes(_i + ':present') ? '现在已探索' : '现在未探索'"><<print $tower.visited.includes(_i + ':present') ? '●' : '○'>></span></span></li>
 <</for>></ol>
+<p class="nousta-small">上下楼保留时代；转动杖头留在同层。</p>
 </details>
-<details class="tower-panel"><summary>玩法与改编来源</summary><p>留意同一间屋子在过去与现在的不同，就能找到登塔的办法。任何角色都能走完本篇，关键线索无需掷骰；切换时代、查看手记都不扣生命或金币。物品和手记随你往返，不必重新收集。侧栏可以存档、读档或回退，抵达结局后也能回退尝试其他选择。</p><p>改编自 Jaclyn Lewis 的 <a href="https://jaclynlewis.itch.io/ascend-noustas-tower" target="_blank" rel="noopener noreferrer">Ascend Nousta’s Tower</a>（2023）。中文叙事、路线与结局有改写；本篇改编内容采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>。</p></details>
-<<if $tower.ending>><<link "重新开始">><<run Engine.restart()>><</link>><</if>>
+<details class="tower-panel" open><summary>随身物品</summary>
+<ul class="tower-inventory"><<for _item range setup.towerInventory($tower)>><li><strong><<print _item.label>></strong><span><<print _item.detail>></span></li><</for>></ul>
+</details>
+<details class="tower-panel"><summary>探险手记 · <<print $tower.notes.length>> 条线索</summary>
+<<if $tower.notes.length>><ol class="tower-notes"><<for _note range $tower.notes>><li><<print _note>></li><</for>></ol><<else>><p>手记还是空白。读书或调查时，你会把找到的线索记在这里。</p><</if>>
+</details>
+</aside>
+</div>
 </div>
 <</nobr>>

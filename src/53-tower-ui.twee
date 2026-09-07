@@ -1,0 +1,2 @@
+:: StoryDisplayTitle
+<<if $adventure is "tower" or passage() is "开场">>诺斯塔之塔<<else>>迷雾森林<</if>>
