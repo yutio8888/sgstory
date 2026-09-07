@@ -82,7 +82,7 @@ try {
  assert.equal(JSON.stringify(sc.State.variables.tower),savedTower);
  for(const id of ['up','up','meal','up','serve','up','shift','loot','up','up','shift','shield','shift','up','up','shift','promise','shift','free']) await uiStep(id);
  assert.equal(sc.State.variables.tower.ending,'free');
- assert(w.document.querySelector('.ending-card').textContent.includes('天空不是牢笼'));
+ assert(w.document.querySelector('.ending-card').textContent.includes('梁外的天空'));
  assert.equal(JSON.stringify(sc.State.variables.pc),pcBefore);
  assert.equal(w.document.querySelectorAll('.tower-actions a').length,0);
  console.log('✓ 实际 HTML：车卡入口、完整和平路线、提示零消耗、存读档与回退、原角色不受影响');
