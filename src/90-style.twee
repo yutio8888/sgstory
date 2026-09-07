@@ -268,3 +268,23 @@ body {
 	display: inline-block;
 	min-width: 5.5em;
 }
+
+/* Nousta's Tower: scoped reading/navigation layout. */
+.tower-shell { letter-spacing: .025em; }
+.tower-heading { border-bottom: 1px solid #706147; padding-bottom: 1em; }
+.tower-kicker { color: #d9bb7c; font: .72em/1.6 sans-serif; letter-spacing: .18em; }
+.tower-heading h1 { font-size: 1.75em; line-height: 1.5; margin: .3em 0; }
+.tower-era { color: #dac79f; font-size: .85em; }
+.tower-goal { color: #beb4cc; font-size: .85em; }
+.tower-feedback { border-left: 3px solid #d9bb7c; background: #282434; padding: .7em 1em; }
+.tower-warning { color: #e5cba0; font-size: .9em; }
+.tower-actions { display: grid; gap: .65em; margin: 1.5em 0; }
+.passage .tower-actions a.link-internal, .tower-invitation a.link-internal { display: block; border: 1px solid #655a75; border-radius: 6px; padding: .6em .85em; background: #2a2638; line-height: 1.6; }
+.passage a:focus-visible, summary:focus-visible { outline: 3px solid #e2c887; outline-offset: 4px; }
+.tower-panel { border-top: 1px solid #484052; padding: .7em 0; font-size: .85em; }
+.tower-panel summary { cursor: pointer; color: #c9bedb; padding: .3em 0; }
+.tower-map { padding-left: 1.7em; }
+.tower-invitation { border: 1px solid #706147; border-radius: 8px; padding: 1em; margin: 1.5em 0; }
+.tower-invitation h2 { font-size: 1.2em; color: #e2c887; margin: 0; }
+@media (max-width: 600px) { .tower-heading h1 { font-size: 1.4em; } .tower-actions a { overflow-wrap: anywhere; } }
+@media (prefers-reduced-motion: reduce) { .passage { animation: none; } .hpbar-fill { transition: none; } }

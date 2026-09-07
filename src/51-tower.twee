@@ -1,0 +1,50 @@
+:: 诺斯塔启程
+<<set $tower to setup.newTower()>>
+<<goto "诺斯塔之塔">>
+
+:: 诺斯塔之塔
+<<nobr>>
+<<set _room to setup.towerRooms[$tower.floor]>>
+<div class="tower-shell">
+<header class="tower-heading">
+<p class="tower-kicker">NOUSTA’S TOWER · 双时之塔</p>
+<h1><<print _room.name>></h1>
+<p class="tower-era"><<print $tower.era === 'past' ? '◈ 过去 · 哥布林占领时期' : '◇ 现在 · 荒塔遗迹'>> · <<print $tower.floor + 1>> / 11 层</p>
+</header>
+<<if $tower.ending>>
+<section class="ending-card">
+<h2><<print ({free:'结局 · 天空不是牢笼',treasure:'结局 · 满袋金币',leave:'结局 · 带回见闻'})[$tower.ending]>></h2>
+<p><<print $tower.message>></p>
+<p>探索了 <<print $tower.visited.length>> / 22 个时态场景，留下 <<print $tower.notes.length>> 条手记。</p>
+</section>
+<<else>>
+<p class="tower-goal">目标：登上塔冠，弄清诺斯塔为何留在这里。</p>
+<<if $tower.message>><p class="tower-feedback" role="status"><<print $tower.message>></p><</if>>
+<div class="tower-prose"><p><<print _room[$tower.era]>></p></div>
+<<if $tower.floor is 0 and $tower.era is 'present'>><p class="tower-warning">向上的石阶已断。时光杖可以让你回到阶梯完好的时候。</p><</if>>
+<<if $tower.floor is 5 and $tower.era is 'past' and not $tower.guards>><p class="tower-warning">守卫挡住上行路线。可以送餐、用符文，或切换到现在。</p><</if>>
+<<if $tower.floor is 9 and $tower.era is 'past'>><p class="tower-warning">驯龙者堵住塔顶入口。杖头仍在发光，可以切到现在绕开。</p><</if>>
+<<if $tower.floor is 10 and $tower.era is 'present'>><p class="tower-warning">先做好准备，再选择结局。和平路线需要养龙书、幼龙的信任，以及符文或有次数的护符；取宝需要防火盾或卷轴。可以下楼寻找。</p><</if>>
+<nav class="tower-actions" aria-label="场景行动">
+<<for _action range setup.towerActions($tower)>>
+<<capture _action>>
+<<link _action.label>><<set $tower to setup.towerAct($tower, _action.id)>><<goto "诺斯塔之塔">><</link>>
+<</capture>>
+<</for>>
+</nav>
+<details class="tower-panel"><summary>需要一点提示？</summary><p><<print _room.hint>></p></details>
+<</if>>
+<details class="tower-panel"><summary>探险手记 · <<print $tower.notes.length>> 条线索</summary>
+<<if $tower.notes.length>><ul><<for _note range $tower.notes>><li><<print _note>></li><</for>></ul><<else>><p>还没有记录。阅读书籍和调查场景会自动记下线索。</p><</if>>
+<p>随身物品：森图里亚之杖<<if $tower.book>>、养龙书笔记<</if>><<if $tower.rune>>、浮空符文<</if>><<if $tower.meal>>、送餐盘<</if>><<if $tower.shield>>、防火盾<</if>><<if $tower.scroll>>、防火卷轴<</if>><<if $tower.loot>>、巨剑、逆重力护符（剩 <<print $tower.charges>> 次）<</if>>。</p>
+</details>
+<details class="tower-panel"><summary>探索地图 · <<print $tower.visited.length>> / 22</summary>
+<p>只显示亲自到过的场景。上下楼保持当前时代；切换时代保持楼层。</p>
+<ol class="tower-map"><<for _i to 0; _i lt setup.towerRooms.length; _i++>>
+<li><<if $tower.visited.includes(_i + ':past') or $tower.visited.includes(_i + ':present')>><<print setup.towerRooms[_i].name>><<else>>尚未探索<</if>> · 过去 <<print $tower.visited.includes(_i + ':past') ? '●' : '○'>> / 现在 <<print $tower.visited.includes(_i + ':present') ? '●' : '○'>></li>
+<</for>></ol>
+</details>
+<details class="tower-panel"><summary>玩法与改编来源</summary><p>本篇以观察和时态解谜为主，角色属性不影响通关。切换与查看手记不消耗生命或金币，关键线索不需要随机检定。使用侧栏存档、读档或回退；结局后也可回退探索其他选择。</p><p>改编自 Jaclyn Lewis 的 <a href="https://jaclynlewis.itch.io/ascend-noustas-tower" target="_blank" rel="noopener noreferrer">Ascend Nousta’s Tower</a>（2023）。中文叙事、路线与结局有改写；本篇改编内容采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>。</p></details>
+<<if $tower.ending>><<link "重新开始">><<run Engine.restart()>><</link>><</if>>
+</div>
+<</nobr>>

@@ -3,6 +3,12 @@
 基于浏览器的文字冒险游戏模板：**Twee 纯文本源码 → 编译成单个 HTML 文件**。
 剧情用 git 管理，构建走 CLI，也可随时导入 Twine 2 可视化编辑器双向编辑。
 
+## 新增冒险：诺斯塔之塔
+
+开场点击 **探索诺斯塔之塔**，选择角色后进入。基于 Jaclyn Lewis 的 *Ascend Nousta’s Tower* 改编：11 层、22 个过去／现在场景，养龙书与浮空符文、厨房送餐、遗物与防火盾，以及和平解放、取宝、撤离三种结局。支持手记、已探索地图、按需提示与存读档；原有森林篇仍由“踏上旅途”进入。
+
+来源、逐层改编与许可见 [改编说明](docs/NOUSTA.md)，本地验证与交接见 [当前进度](docs/PROGRESS.md)。下面的在线试玩链接是上游原有部署，**不会自动包含本地修改**。
+
 ## 快速开始
 
 **▶ 在线试玩：https://sagitrs.github.io/sgstory/**（push 到 main → 测试通过 → 自动发布）
@@ -101,7 +107,8 @@ Twine 2（桌面版）可以**导入编译产物继续可视化编辑**：
 | 部分 | 许可证 | 文件 |
 |---|---|---|
 | 代码（构建脚本、自定义宏、样式） | MIT | [LICENSE](LICENSE) |
-| 剧情文本与游戏内容（叙事、角色、结局） | CC BY 4.0 | [LICENSE-CONTENT.md](LICENSE-CONTENT.md) |
+| 原有森林剧情与游戏内容（叙事、角色、结局） | CC BY 4.0 | [LICENSE-CONTENT.md](LICENSE-CONTENT.md) |
+| 诺斯塔之塔改编内容 | CC BY-SA 4.0 | [改编与署名](docs/NOUSTA.md) |
 | SugarCube 2（引擎，vendor 并嵌入产物） | BSD-2-Clause（© Thomas Michael Edwards） | [NOTICE](NOTICE) |
 | 霞鹜文楷 LXGW WenKai（正文字体，子集内嵌） | SIL OFL 1.1（© lxgw） | [NOTICE](NOTICE) |
 | D&D SRD 5.2（规则数值来源） | CC BY 4.0（© Wizards of the Coast） | [NOTICE](NOTICE) |

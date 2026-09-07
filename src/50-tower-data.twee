@@ -1,0 +1,72 @@
+:: 诺斯塔规则 [script]
+/* Adapted from Jaclyn Lewis, Ascend Nousta's Tower (2023), CC BY-SA 4.0.
+ * See docs/NOUSTA.md. Tower narrative/content remains CC BY-SA 4.0.
+ * State is serializable SugarCube story state; queries never mutate it. */
+setup.towerRooms = [
+ {name:'塔基 · 泥土与断阶', past:'湿土上印着成排的哥布林脚印。新砌的石阶贴墙盘旋，灰浆还未干透。你手中的杖头映出另一座荒塔的轮廓。', present:'石阶坍成碎块，哥布林白骨半埋在泥土里。一根刻着 Centuria 的杖仍闪着微光。握住它，指尖听见了两种心跳。', hint:'现在的阶梯已经塌了。切到过去，从完整的阶梯向上走。'},
+ {name:'藏书架 · 藤蔓里的书', past:'药瓶、园艺工具和厚重的养龙书塞满架子。书页夹着喂食记录：他们想把一条龙养成战争兵器。', present:'藤蔓爬过空书架，枝条间卡着一本养龙旧书。封面有爪痕，书脊却还能翻开。', hint:'把书里的观察记下来；它能帮助你理解塔顶的龙。'},
+ {name:'学者室 · 会漂浮的文字', past:'哥布林学者正向墙面疾书。一个符号让墨滴悬在半空；楼上传来脚步声，他们紧张地望着天花板。', present:'墙上只剩涂抹的笔迹。一个符号保存得格外完整，笔画末端仿佛仍托着一滴不会落下的墨。', hint:'过去可以记下符文笔顺，现在可以辨认遗迹。浮空能让你越过守卫层，也能帮助龙离塔。'},
+ {name:'寝室 · 未完成的野心', past:'豪华床铺旁摊着一本速写簿：哥布林骑着龙掠过村庄，金币像雨一样落进口袋。床脚藏着一张未画完的塔顶轮廓。', present:'床早已腐朽，霉斑沿墙攀升，像一幅倒着生长的地图。昔日主人的野心只剩下墙角的潮气。', hint:'这里没有必取钥匙。可以慢下来读图，也可以继续上楼。'},
+ {name:'厨房 · 巨型肉食兽', past:'锅盖急跳，哥布林厨师围着一大块兽肉忙碌。送餐盘摞在门边，楼上的卫兵正敲着栏杆催饭。', present:'橱柜里剩着陈年罐藏，锅铲悬在覆满煤灰的简陋烟罩下。风穿过烟道，发出饥饿的哨声。', hint:'过去拿一盘饭，就能以送餐者的身份通过上一层；也可以在现在避开守卫。'},
+ {name:'议事厅 · 绳下的会议', past:'人类骸骨吊在天花板上。卫兵围着首领商议下一次劫掠，楼梯正好在他们背后。贸然穿过去会被拦住。', present:'旧绳吊着几截白骨，晃动的影子扫过空桌。再没有人阻拦楼梯，但你仍记得过去的盔甲声。', hint:'送餐、浮空或切换到现在，三条路都能越过守卫，不需要掷骰硬闯。'},
+ {name:'储藏层 · 炸药与遗物', past:'成排木桶散出刺鼻气味，桶盖画着火焰与骷髅。细碎粉末一直撒到楼梯边——这里绝不能点火。', present:'杂物堆里露出一柄巨剑、一卷防火卷轴和几具人类骸骨。一枚护符压在骨指下，刻着三道逆重力刻痕。', hint:'现在有三次逆重力护符和防火卷轴。拿取不需冒险；过去的炸药只需避开。'},
+ {name:'便壶层 · 屏住呼吸', past:'一排便壶摆在墙边。显然有人连下楼都嫌麻烦。你侧过身给楼梯腾出空间，决定不在这里深呼吸。', present:'器皿都不见了，难闻的气味却坚持留守。墙面擦痕正对着楼梯，指向更高处的兵营。', hint:'这是安全的缓冲层，没有藏在污物里的必需品。'},
+ {name:'兵营 · 耐火的盾', past:'床铺与武器架挤作一团。大部分武器已经领走，墙上还挂着几面防火盾，边缘有被灼烧过的刻痕。', present:'锈铁支架钉在墙上，折叠铁床里塞着烂透的床垫。空盾钩下有一小块没被熏黑的墙。', hint:'切到过去取防火盾；如果拿过防火卷轴，也有另一种防护。'},
+ {name:'驯龙层 · 火留下的人形', past:'壮硕的驯龙者穿着防护装备堵在上方，铁钩敲着盾牌。他们不欢迎陌生人，头顶却传来幼龙压低的呜咽。', present:'厚重的烧痕覆盖四壁，一处焦痕清楚勾出人形。通往塔顶的梯子仍在，灼热空气一阵阵压下来。', hint:'现在没有驯龙者。回过去也不会把自己困住；随时可以切回。'},
+ {name:'塔冠 · 诺斯塔', past:'刚孵出的诺斯塔蜷在梁下。哥布林打算把它养成兵器；它盯着下面的铁钩，悄声说，等长大就要把他们烧个精光。', present:'成年龙盘在金币与冒险者遗物上，鳞片顶住屋梁。它仍以为自己被困着，甚至没意识到如今的力量足以撞开塔顶。', hint:'养龙书能帮你赢得信任。过去倾听幼龙，再在现在用符文或护符展示出口；想取宝，则先准备防火措施。'}
+];
+setup.newTower = () => ({version:1, floor:0, era:'present', visited:['0:present'], notes:[], book:false, rune:false, meal:false, guards:false, loot:false, shield:false, scroll:false, charges:0, promise:false, ending:'', message:'你拾起森图里亚之杖。切换时代没有次数限制，物品与笔记随你同行。'});
+setup.towerActions = (s) => {
+ if (s.ending) return [];
+ const a = [];
+ const add = (id,label) => a.push({id,label});
+ add('shift', s.era === 'present' ? '转动时光杖 → 过去' : '转动时光杖 → 现在');
+ if (s.floor === 1 && !s.book) add('book','研读养龙书 · 记录线索');
+ if (s.floor === 2 && !s.rune) add('rune','描摹浮空符文 · 记入手记');
+ if (s.floor === 3 && !s.notes.includes('速写：塔顶只是普通屋梁，并非囚龙的封印。')) add('sketch','翻看寝室遗痕 · 记录塔顶构造');
+ if (s.floor === 4 && s.era === 'past' && !s.meal && !s.guards) add('meal','拿起送餐盘 · 无需金币');
+ if (s.floor === 5 && s.era === 'past' && !s.guards) {
+  if(s.meal) add('serve','送上热饭 · 安全通过守卫');
+  if(s.rune) add('float','用浮空符文越过守卫 · 不消耗物品');
+ }
+ if (s.floor === 6 && s.era === 'present' && !s.loot) add('loot','收好遗物 · 护符三次／防火卷轴／巨剑');
+ if (s.floor === 8 && s.era === 'past' && !s.shield) add('shield','取下防火盾 · 可反复使用');
+ if (s.floor === 10) {
+  if(s.era === 'past' && s.book && !s.promise) add('promise','按书中的方法安抚幼龙 · 倾听它的愿望');
+  if(s.era === 'present') {
+   if(s.book && s.promise && (s.rune || s.charges > 0)) add('free','向诺斯塔展示出口 · 和平解放（优先用符文，否则护符一次）');
+   if(s.shield || s.scroll) add('treasure','护住自己取走一袋金币 · 结束冒险（优先用盾，否则消耗卷轴）');
+  }
+ }
+ const blocked = (s.floor===0 && s.era==='present') || (s.floor===5 && s.era==='past' && !s.guards) || (s.floor===9 && s.era==='past');
+ if(s.floor < 10 && !blocked) add('up','登上一层');
+ if(s.floor > 0) add('down','返回下一层');
+ if(s.floor === 0) add('leave','带着见闻离开 · 结束冒险');
+ return a;
+};
+setup.towerAct = (state,id) => {
+ // Reject unavailable/repeated actions without changing any state.
+ if(!setup.towerActions(state).some(a=>a.id===id)) return state;
+ const s = {...state, notes:[...state.notes], visited:[...state.visited], message:''};
+ const note = text => { if(!s.notes.includes(text)) s.notes.push(text); };
+ switch(id) {
+ case 'shift': s.era = s.era === 'present' ? 'past' : 'present'; s.message='杖头旋过半圈。你仍站在同一层，眼前的时代已更替。'; break;
+ case 'up': s.floor++; break;
+ case 'down': s.floor--; break;
+ case 'book': s.book=true; note('养龙书：龙能理解语言；先听它的恐惧，再告诉它如何离开。'); s.message='你记下书中的安抚方法。无需职业检定，也不会错过关键线索。'; break;
+ case 'rune': s.rune=true; note('浮空符文：能让目标悬浮一分钟；可越过守卫，也可展示向上的出口。'); s.message='笔顺与咒音已记牢。探索期间可重复施展，不必刷检定。'; break;
+ case 'sketch': note('速写：塔顶只是普通屋梁，并非囚龙的封印。'); s.message='纸与霉痕叠成同一幅轮廓：屋顶并不是牢笼。'; break;
+ case 'meal': s.meal=true; s.message='你端起一盘热饭。厨师忙着翻锅，只朝楼上扬了扬下巴。'; break;
+ case 'serve': s.meal=false; s.guards=true; s.message='卫兵接过饭盘，给送餐的人让开楼梯。以后也能自由通过这里。'; break;
+ case 'float': s.guards=true; s.message='你贴着天花板越过会议桌，松开侧梯，留下一条可回访的通道。'; break;
+ case 'loot': s.loot=true; s.charges=3; s.scroll=true; s.message='你收好巨剑、防火卷轴和逆重力护符。遗物堆已空，回访不会重复获得。'; note('逆重力护符：最多三次；防火卷轴可保护一次取宝行动。'); break;
+ case 'shield': s.shield=true; s.message='盾面隔开炉口余热。你把它背好，随时可以返回现在。'; break;
+ case 'promise': s.promise=true; note('幼龙的愿望：它想离开铁钩与命令，不想再被当作兵器。'); s.message='你没有要求它替任何人作战，只答应让它看见天空。杖中传来成年龙悠长的回声。'; break;
+ case 'free': if(!s.rune) s.charges--; s.ending='free'; s.message='尘埃向上飘起，诺斯塔终于仰头。你说起幼时的愿望，它撑开双翼，撞碎普通的屋梁，第一次飞进没有铁钩的天空。'; break;
+ case 'treasure': if(!s.shield) s.scroll=false; s.ending='treasure'; s.message='火光被防护隔在身外。你沿着来路带回一袋金币，但龙仍伏在塔顶，守着它以为永远走不出的牢笼。'; break;
+ case 'leave': s.ending='leave'; s.message='你走出塔门，把两种时代的见闻带回人间。有些门这次没有打开，但你已知道它们在哪里。'; break;
+ }
+ const key = `${s.floor}:${s.era}`;
+ if(!s.visited.includes(key)) s.visited.push(key);
+ return s;
+};

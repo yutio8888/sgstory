@@ -1,3 +1,5 @@
+> 范围说明：本文件的 CC BY 4.0 适用于原有森林内容。新增诺斯塔之塔改编内容采用 CC BY-SA 4.0；作者署名、来源、范围和修改说明见 [docs/NOUSTA.md](docs/NOUSTA.md)。
+
 本仓的剧情文本与游戏内容（src/*.twee 中的叙事文本、结局、角色、世界观）采用 Creative Commons Attribution 4.0 International 发布。
 
 Attribution 4.0 International
