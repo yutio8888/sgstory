@@ -5,6 +5,15 @@ import { JSDOM, VirtualConsole } from 'jsdom';
 // Exercise the compiled story and SugarCube's own navigation/save APIs. No
 // resolver calls or synthesized tower states are used to traverse either game.
 const fixture = JSON.parse(readFileSync('test/fixtures/nousta-v1-save.json', 'utf8'));
+if (process.argv.includes('--web')) {
+ const html = readFileSync('dist/index.html', 'utf8');
+ assert(Buffer.byteLength(html) < 1_000_000, 'Online entry must remain below 1 MB');
+ assert(!html.includes('data:image/png;base64,') && !html.includes('data:font/woff2;base64,'), 'Large assets must not block online HTML');
+ for (const file of ['nousta-cover.png', 'nousta-past.png', 'nousta-present.png', 'wenkai-Regular.woff2', 'wenkai-Medium.woff2']) {
+  assert(html.includes(`assets/${file}`));
+  assert(readFileSync(`dist/assets/${file}`).length > 0, `Missing web asset: ${file}`);
+ }
+}
 const runtimeErrors = [];
 const virtualConsole = new VirtualConsole();
 virtualConsole.on('jsdomError', error => {
@@ -58,7 +67,7 @@ try {
   assert.equal(sc.State.length, historyLength, 'Details created a history turn');
   clean();
  };
- assert(w.getComputedStyle(current().querySelector('.nousta-cover')).backgroundImage.includes('data:image/png'), 'Cover artwork must be embedded and applied, not a missing CSS variable');
+ assert(w.getComputedStyle(current().querySelector('.nousta-cover')).backgroundImage.includes(process.argv.includes('--web') ? 'assets/nousta-cover.png' : 'data:image/png'), 'Cover artwork must use the correct build URL and be applied');
  await click('探索诺斯塔之塔');
  assert.equal([...current().querySelectorAll('a.link-internal')].filter(a => a.textContent === '快速成型').length, 3);
  await click('快速成型', 1);

@@ -132,3 +132,7 @@ Twine 2（桌面版）可以**导入编译产物继续可视化编辑**：
 - [5e-bits/5e-srd-api](https://github.com/5e-bits/5e-srd-api)（MIT）— SRD 数据组织
 
 发布流程：push 到 main → CI 跑测试 → 构建并自动发布到 GitHub Pages。
+
+### 在线发布与离线构建
+
+`npm run build:web` 生成轻量入口及同站图片/字体，部署整个 `dist/`；GitHub Pages使用此构建。`npm run build` 保留插画和字体内嵌的离线单HTML。在线资源下载失败不影响文字规则运行，但若无法连接Pages域名，仍需可访问的托管服务。

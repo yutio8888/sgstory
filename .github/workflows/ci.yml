@@ -43,7 +43,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: pip install fonttools brotli
-      - run: npm run build
+      - run: npm run build:web
+      - run: node test/tower-ui-v2.mjs --web
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

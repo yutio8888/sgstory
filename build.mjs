@@ -1,7 +1,8 @@
-import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 
 const SRC = 'src';
+const WEB = process.argv.includes('--web');
 const OUT = 'dist/index.html';
 
 mkdirSync('build', { recursive: true });
@@ -16,7 +17,7 @@ if (files.length === 0) {
 const merged = files.map((f) => readFileSync(`${SRC}/${f}`, 'utf8').trimEnd()).join('\n\n') + '\n';
 writeFileSync('build/game.twee', merged, 'utf8');
 
-// Embed project artwork into the single-file build. No CDN or runtime fetch.
+// Offline embeds artwork; web loads same-origin artwork only when displayed.
 const artManifestPath = 'assets/tower-art.json';
 let artworkStyles = '';
 if (existsSync(artManifestPath)) {
@@ -40,7 +41,13 @@ if (existsSync(artManifestPath)) {
 		const mime = {png:'image/png', jpg:'image/jpeg', webp:'image/webp'}[extension];
 		console.log(`  Artwork ${art.file}: ${Math.round(data.length / 1024)} KB`);
 		const [selector, overlay] = artTargets[art.variable];
-		return `${selector} { background-image: ${overlay}, url("data:${mime};base64,${data.toString('base64')}"); }`;
+		let url = `data:${mime};base64,${data.toString('base64')}`;
+		if (WEB) {
+			mkdirSync('dist/assets', { recursive: true });
+			copyFileSync(art.file, `dist/${art.file}`);
+			url = art.file;
+		}
+		return `${selector} { background-image: ${overlay}, url("${url}"); }`;
 	});
 	artworkStyles = '\n\n:: 96-tower-art [stylesheet]\n' + declarations.join('\n') + '\n';
 }
@@ -61,7 +68,16 @@ if (fontOK && existsSync('vendor/fonts/LXGWWenKai-Medium.ttf')) {
 	try {
 		console.log('🔤 生成字体子集（LXGW WenKai）…');
 		execSync('python3 scripts/subset_font.py build/font-chars.txt build/fontface.twee', { stdio: 'inherit' });
-		mergedFinal = merged + '\n\n' + readFileSync('build/fontface.twee', 'utf8');
+		let fontStyles = readFileSync('build/fontface.twee', 'utf8');
+		if (WEB) {
+			mkdirSync('dist/assets', { recursive: true });
+			for (const name of ['Regular', 'Medium']) {
+				const file = `wenkai-${name}.woff2`;
+				copyFileSync(`build/${file}`, `dist/assets/${file}`);
+				fontStyles = fontStyles.replace(/data:font\/woff2;base64,[A-Za-z0-9+/=]+/, `assets/${file}`);
+			}
+		}
+		mergedFinal = merged + '\n\n' + fontStyles;
 	} catch (e) {
 		console.warn('⚠️  字体子集化失败（缺 fonttools/brotli?），使用系统字体回退：' + e.message.split('\n')[0]);
 	}
@@ -78,4 +94,4 @@ execSync(`npx extwee -c -i build/game.twee -o ${OUT} -s vendor/format.js`, {
 });
 
 console.log(`\n✔ 编译完成：${OUT}（合并了 ${files.length} 个源文件${hasEmbeddedFonts ? ' + 字体' : ''}${artworkStyles ? ' + 插画' : ''}）`);
-console.log('  浏览器直接打开即可游玩；也可用 Twine 2 编辑器导入继续可视化编辑。');
+console.log(WEB ? '  在线版：部署整个 dist 目录，图片和字体按需从同站加载。' : '  离线版：浏览器直接打开即可游玩；也可用 Twine 2 编辑器导入。');
