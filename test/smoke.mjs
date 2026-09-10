@@ -21,8 +21,9 @@ const w = dom.window;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 await sleep(1200);
-// jsdom 补齐启动链：StoryInit + 引擎启动（真实浏览器自动完成）
+// jsdom 补齐启动链：StoryInit → 侧栏启动 → 引擎启动（真实浏览器自动完成）
 new w.SugarCube.Wikifier(null, w.document.querySelector('tw-passagedata[name="StoryInit"]').textContent);
+w.SugarCube.UIBar.start();
 w.SugarCube.Engine.start();
 await sleep(600);
 
@@ -41,6 +42,8 @@ const click = async (label) => {
 // ── 开场 ──
 let p = w.document.querySelector('#passages .passage');
 assert(p?.textContent.includes('迷雾森林'), '开场段落渲染');
+assert(w.document.querySelector('#menu-item-saves')?.textContent.includes('存档与读档'), '原生存档菜单已中文化');
+assert(w.document.querySelector('#menu-item-restart')?.textContent.includes('重新开始'), '原生重开菜单已中文化');
 await click('踏上旅途');
 
 // ── 车卡：快速模式（预设）──
@@ -72,7 +75,7 @@ assert(p.textContent.includes('歪脖子鸭'), '进入酒馆');
 assert(p.textContent.includes('无名旅人'), '角色名插值');
 assert(p.textContent.includes('15 枚金币'), '金币插值');
 assert(!links().some((a) => a.textContent.includes('买一支火把')), '已带火把 → 购买链接隐藏');
-assert(links().some((a) => a.textContent === '听角落里的老猎人吹牛'), '传闻链接存在');
+assert(links().some((a) => a.textContent === '听老猎人讲森林里的事'), '传闻链接存在');
 
 await click('推门出发，走进暮色');
 

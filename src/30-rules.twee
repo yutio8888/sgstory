@@ -48,7 +48,7 @@ window.Rules = {
 		return adv > 0 ? Math.max(a, b) : Math.min(a, b);
 	},
 
-	// d20 检定（SRD 5.2：自然20必然成功、自然1必然失败）
+	// 本游戏的 d20 检定约定：自然20必然成功、自然1必然失败
 	check(pc, skill, dc, { adv = 0, bonus = 0 } = {}) {
 		const mod = this.skillMod(pc, skill) + bonus + (pc.flags?.luck ? 1 : 0);
 		const roll = this.d20(adv);
@@ -91,8 +91,8 @@ function renderCheck(res) {
 	const cls = res.success ? 'check-success' : 'check-fail';
 	const icon = res.success ? '✔' : '✘';
 	const modStr = res.mod >= 0 ? `+${res.mod}` : `${res.mod}`;
-	return `<div class="check-result ${cls}">🎯 ${res.label} DC${res.dc}：` +
-		`<span class="check-dice">d20(${res.roll})</span> ${modStr} = <b>${res.total}</b> ${icon} ${res.success ? '成功' : '失败'}</div>`;
+	return `<div class="check-result ${cls}">🎯 ${res.label}（目标 ${res.dc}）：` +
+		`<span class="check-dice">掷骰 ${res.roll}</span> ${modStr} = <b>${res.total}</b> ${icon} ${res.success ? '成功' : '失败'}</div>`;
 }
 
 Macro.add('check', {

@@ -1,13 +1,13 @@
 /% ═══════════════ 车卡流程：8 轮三选一 ═══════════════ %/
 
 :: 车卡
-<<if $adventure is "tower">><div class="tower-chargen-note"><p class="tower-kicker">旅程准备 · 01</p><h1>谁推开了塔门？</h1><p>选一个同行的身份。塔内靠观察与道具解谜，三位旅人都能抵达每一种结局。</p></div><</if>>
+<<if $adventure is "tower">><div class="tower-chargen-note"><p class="tower-kicker">旅程准备 · 01</p><h1>谁推开了塔门？</h1><p>选择你在故事中的身份。塔内依靠观察、线索和道具解谜，不使用角色属性检定；无论选择哪种身份，都能抵达每一种结局。</p></div><</if>>
 <<if $pc.mode is "">>
 /% ── 模式选择：快速预设 / 专家 8 轮 ── %/
 <div class="chargen-card">
-	<div class="chargen-progress">车卡 · 选择塑造方式</div>
+	<div class="chargen-progress">创建角色 · 选择方式</div>
 	<h3>快速模式</h3>
-	<p class="chargen-intro">三套预设一键成型；或逐轮细调，自由调配每一项。</p>
+	<p class="chargen-intro">选择一位旅人，立即完成角色创建；也可以在下方进入逐轮选择，亲自决定出身与装备。</p>
 	<div class="choices">
 	<<for _i to 0; _i lt ChargenPresets.length; _i++>>
 		<<capture _i>>
@@ -35,7 +35,7 @@
 <<set _round to ChargenRounds[$pc.round]>>
 <<set _n to $pc.round + 1>>
 <div class="chargen-card">
-	<div class="chargen-progress">专家模式 · _n / 8</div>
+	<div class="chargen-progress">创建角色 · 第 _n 步，共 8 步</div>
 	<h3>_round.title</h3>
 	<p class="chargen-intro">_round.intro</p>
 	<div class="choices">
@@ -58,7 +58,7 @@
 
 :: 角色卡
 <div class="charsheet">
-	<h2>✦ $pc.name 的冒险卡 ✦</h2>
+	<h2>✦ $pc.name 的角色卡 ✦</h2>
 	<p class="charsheet-line">$pc.speciesLabel · $pc.classLabel · $pc.bgLabel 出身</p>
 
 	<<if $adventure is "tower">>
@@ -68,11 +68,11 @@
 </div>
 
 <<if $adventure is "tower">>
-你收好行囊，走近废塔。门里的楼梯断在半空，泥土间有一点杖头的微光。留心过去与现在留下的痕迹：任何角色都能找到帮龙离开的办法。
+你收好行囊，走近废塔。门内的楼梯断在半空，一根埋在泥土里的手杖透出微光。塔中究竟发生过什么？答案或许藏在两个时代留下的痕迹里。
 
 [[出发，前往诺斯塔之塔|诺斯塔启程]]
 <<else>>
-车卡已成。酒馆的门在雾的尽头等你。
+行囊已备好，旅途即将开始。「歪脖子鸭」酒馆的窗里亮着暖光。
 
 [[出发，前往歪脖子鸭酒馆|酒馆]]
 
@@ -92,6 +92,8 @@
 			<td>$pc.abilities.cha<br>//<<print Rules.fmod($pc.abilities.cha)>>//</td>
 		</tr>
 	</table>
+
+	<p class="chargen-intro">属性下方的数值是检定时使用的调整值；熟练技能再加 2。森林篇掷一枚二十面骰，加上调整值及相关加成，达到目标即成功。优势表示掷两次取较高值，劣势取较低值；骰面为 20 时必定成功，为 1 时必定失败。</p>
 
 	<div class="charsheet-rows">
 		<div><span class="label">生命</span>$pc.hp / $pc.max_hp</div>

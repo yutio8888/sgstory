@@ -2,19 +2,19 @@
 /* Adapted from Jaclyn Lewis, Ascend Nousta's Tower (2023), CC BY-SA 4.0.
  * See docs/NOUSTA.md and docs/TOWER-V2-DESIGN.md. Queries are pure.
  * Version 1 saves retain their original rules in 48-tower-legacy.twee. */
-setup.newTower = () => ({version:2,floor:0,era:'present',visited:['0:present'],notes:[],book:false,rune:false,sketch:false,meal:false,guards:false,loot:false,sword:false,shield:false,scroll:false,charges:0,promise:false,rope:false,ropeTaken:false,witness:false,ledger:false,brush:false,drainCleared:false,vented:false,beamWedged:false,exitOpen:false,bellSilent:false,decree:false,memorial:false,ending:'',message:'你从白骨旁拾起森图里亚之杖。杖头转过半圈，断阶的轮廓便重新接拢。你记住塔门的位置：任何时候都能沿原路回来。'});
+setup.newTower = () => ({version:2,floor:0,era:'present',visited:['0:present'],notes:[],book:false,rune:false,sketch:false,meal:false,guards:false,loot:false,sword:false,shield:false,scroll:false,charges:0,promise:false,rope:false,ropeTaken:false,witness:false,ledger:false,brush:false,drainCleared:false,vented:false,beamWedged:false,exitOpen:false,bellSilent:false,decree:false,memorial:false,ending:'',message:'你从白骨旁拾起森图里亚之杖。杖头微光照过断口，一道完好的阶沿若隐若现。你记住塔门的位置：任何时候都能沿原路回来。'});
 setup.towerActions = s => {
  if(s.version === 1) return setup.towerLegacyActions(s);
  if(s.ending) return [];
  const a=[];
  const add=(id,label,kind='clue',hint='',cost='')=>a.push({id,label,kind,hint,cost});
  const past=s.era==='past';
- add('shift',past?'转动时光杖 → 现在':'转动时光杖 → 过去','travel','仍留在这一层；随身物品随你同行。');
- if(s.floor===1&&!s.book) add('book','研读养龙书','clue','记下如何让龙肯听你说话。');
+ add('shift',past?'转动时光杖 → 现在':'转动时光杖 → 过去','travel','仍留在这一层；随身物品和手记一同往返，不会恢复已用掉的物品。');
+ if(s.floor===1&&!s.book) add('book','研读养龙书','clue','记下如何靠近龙，耐心听它说完。');
  if(s.floor===2&&!s.rune) add('rune','学会一分钟浮空符文','clue','只能托起一个人；无法抬动闸门或塔顶重梁。');
  if(s.floor===3) {
   if(!s.sketch) add('sketch','辨读塔顶结构图','clue','找到重梁的支点，为巨剑开顶提供依据。');
-  if(past&&!s.ledger) add('ledger','抄下出征账册','clue','取证不会惊动主人；记下首领借驯龙者之名伪造的命令。');
+  if(past&&!s.ledger) add('ledger','抄下出征账册','clue','抄录不会惊动主人；留下可供核验的日期、署名与暗记。');
  }
  if(s.floor===4) {
   if(past&&!s.meal&&!s.guards) add('meal','端起一盘热饭');
@@ -23,36 +23,36 @@ setup.towerActions = s => {
  if(s.floor===5) {
   if(!past&&!s.ropeTaken) add('rope','收好吊骨旧绳','tool','结实的中段还可以打结救人。');
   if(past&&!s.guards) {
-   if(s.meal) add('serve','送饭换取议事厅通行','tool','获得持续通行权。','热饭 ×1');
+   if(s.meal) add('serve','送饭换取议事厅通行','tool','卫兵以后也会让路，可以上楼或留在厅中对证。','热饭 ×1');
    if(s.rune) add('float','浮过长桌，放下侧梯','tool','一分钟足够越过卫兵；侧梯以后仍可用。');
   }
   if(past&&s.guards&&s.ledger&&s.witness&&!s.decree) add('decree','当面对证，撤销袭村令','history','抄写员给出的暗记与账册相符。撤令后可与龙订约；放飞与取宝仍可选择。');
  }
  if(s.floor===6&&!past) {
-  if(!s.loot) add('loot','收起遗物：护符、卷轴与巨剑','tool','护符仅有三道刻痕；遗物只能领取一次。');
+  if(!s.loot) add('loot','收起遗物：护符、卷轴与巨剑','tool','护符共能使用三次，要在救人、排烟、开顶与取名册之间分配；前三处也有不用护符的办法。遗物只可领取一次。');
   if(!s.witness) {
-   if(s.charges>0) add('rescueCharm','逆转井口重力，救下抄写员','tool','托起整段坠落的吊架；得到证人和账册暗记。','护符 ×1');
-   if(s.rune&&s.rope) add('rescueRope','沿旧绳浮下井，系住抄写员','tool','只能一次带一个人：你先下井打结，再沿绳扶他上来。绳留在井口。','旧绳 ×1');
+   if(s.charges>0) add('rescueCharm','用护符托起吊架，救下抄写员','tool','将吊架连人托回井口。抄写员获救后，会教你核验账册的暗记。','护符 ×1');
+   if(s.rune&&s.rope) add('rescueRope','沿旧绳浮下井，系住抄写员','tool','浮空只托起你：先下井系绳，再沿绳扶他上来。绳留在井口。','旧绳 ×1');
   }
  }
  if(s.floor===7&&!s.vented) {
-  if(!past&&s.charges>0) add('ventCharm','逆转闸门重力，打开排烟井','history','闸门落进止回槽并永久固定。','护符 ×1');
+  if(!past&&s.charges>0) add('ventCharm','用护符托起重闸，打开排烟井','history','闸门落进止回槽并永久固定。','护符 ×1');
   if(past&&s.brush&&!s.drainCleared) add('clearDrain','用长刷疏通便壶下的排烟槽','history','清理过去的堵塞，现在的检修轮才会重新露出。');
   if(!past&&s.drainCleared) add('ventWheel','转动重现的检修轮','history','手动打开闸门；以后塔冠的烟会从井中排走。');
  }
  if(s.floor===8&&!past&&!s.memorial&&s.charges>0) add('recoverNames','抬起铁床架，取回罹难者名册 · 可选','tool','床架沉重，符文无法托起，巨剑也无处支撑。只能用护符；名册不影响任何结局条件，取回后可把名字带回去。','护符 ×1');
  if(s.floor===8&&past&&!s.shield) add('shield','取下防火盾','tool','可多次挡火，但无法替龙开顶或排烟。');
- if(s.floor===9&&past&&!s.bellSilent&&(s.shield||s.scroll)) add('silenceBell','顶住试喷火，拆掉驯龙铜铃','history','过去的铃拆除后，现在不再有铃声催逼诺斯塔。'+(s.shield?'用盾挡火。':'卷轴会烧尽。'),s.shield?'防火盾（不消耗）':'防火卷轴 ×1');
+ if(s.floor===9&&past&&!s.bellSilent&&(s.shield||s.scroll)) add('silenceBell','挡住试喷的火焰，拆下驯龙铜铃','history','过去的铃拆除后，现在不再有铃声催逼诺斯塔。'+(s.shield?'用盾挡火。':'卷轴会烧尽。'),s.shield?'防火盾（不消耗）':'防火卷轴 ×1');
  if(s.floor===10) {
   if(past&&s.book&&!s.promise) add('promise','放低声音，听幼龙说完','clue','许诺帮它选择自己的去处；不强迫它逃走。');
   if(!past) {
    if(!s.exitOpen) {
-    if(s.charges>0) add('openCharm','逆转重梁重力，撑开塔顶','history','梁木落在外墙上固定，出口永久打开；此行动不会结束冒险。','护符 ×1');
+    if(s.charges>0) add('openCharm','用护符托起重梁，撑开塔顶','history','梁木落在外墙上固定，出口永久打开；此行动不会结束冒险。','护符 ×1');
     if(s.sword&&s.sketch&&!s.beamWedged) add('wedgeSword','按结构图将巨剑楔入支点','tool','巨剑将留在梁下，下一步可沿侧墙扳开重梁。','巨剑 ×1');
     if(s.beamWedged) add('leverBeam','沿侧墙扳开已经松动的重梁','history','借固定的剑身作杠杆；出口永久打开。');
    }
    if(s.promise&&s.exitOpen&&s.vented&&s.bellSilent) add('free','邀请诺斯塔飞向天空 · 结束冒险','ending','出口已开、浓烟已排、驯龙铃已拆。诺斯塔会自行离开；你不取金币。');
-   if(s.promise&&s.decree&&s.witness&&s.bellSilent) add('pact','把去留交给诺斯塔，与它订约 · 结束冒险','ending','袭村令已撤、证人获救、铜铃已拆。它自愿留下守护改作避难所的塔；财宝用来修塔。');
+   if(s.promise&&s.decree&&s.witness&&s.bellSilent) add('pact','把去留交给诺斯塔，与它订约 · 结束冒险','ending','袭村令已撤、证人获救、铜铃已拆。它会自愿留下，用财宝把塔改作避难所；此路线不要求先开顶或排烟。');
    if(s.shield||s.scroll) add('treasure','顶住龙火取一袋金币 · 结束冒险','ending','你带金币独自离开，放弃继续帮助诺斯塔。'+(s.shield?'盾可保住你。':'卷轴会烧尽。'),s.shield?'防火盾（不消耗）':'防火卷轴 ×1');
   }
  }
@@ -74,28 +74,28 @@ setup.towerAct = (state,id) => {
  case 'book':s.book=true;note('养龙书：龙听得懂话。先让它说完，承诺才会被记住；一句命令不会消除旧日的恐惧。');s.message='书页夹着一片烧焦的鳞。你记下如何靠近幼龙，也看见“铜铃后喂食、铜铃后出征”反复出现。';break;
  case 'rune':s.rune=true;note('浮空符文：一次托起一个人，持续一分钟；可越过守卫，配合绳索救人。重闸和塔梁超过它的承重。');s.message='你的靴子浮离石板。一分钟后，鞋底缓缓落回原地；桌子始终纹丝不动。';break;
  case 'sketch':s.sketch=true;note('塔顶结构图：屋梁没有封印。巨剑可楔入外墙支点，再沿侧墙把梁扳开；护符则能直接托起重梁。');s.message='你找到图边的一处红圈：承重支点在外墙，避开龙背便能下手。';break;
- case 'ledger':s.ledger=true;note('出征账册：首领伪造了驯龙者的署名。需要知道核验暗记的人，当面指出篡改。');s.message='你抄下袭村日期。两次签名的尾笔一模一样，连墨点都没有变。';break;
+ case 'ledger':s.ledger=true;note('出征账册：首领借驯龙者之名下令，署名疑有篡改。先找人辨认核验暗记，再到过去的议事厅当面对证。');s.message='你抄下袭村日期。两次签名的尾笔一模一样，连墨点都没有变。';break;
  case 'meal':s.meal=true;s.message='你端起热饭，厨师用下巴指向楼上的催促声。';break;
  case 'brush':s.brush=true;s.message='你把烟罩长刷从钩上取下。刷柄伸得过深槽，刷头还牢牢铆着。';break;
  case 'rope':s.rope=true;s.ropeTaken=true;s.message='你避开腐朽的绳头，截下结实的一段，打了一个试重的结。';break;
  case 'serve':s.meal=false;s.guards=true;s.message='卫兵接走饭盘，让开身后的路。“送饭的，走这边。”';break;
  case 'float':s.guards=true;s.message='你从争吵的人头上浮过，落在桌后，把侧梯搭稳。以后不用再经过桌边。';break;
- case 'loot':s.loot=true;s.charges=3;s.scroll=true;s.sword=true;note('遗物：护符有三次重物逆重力，用于救人、排烟、开顶，或可选回收九层名册。四处用途只有三次，回收名册后至少一处须用其他办法；卷轴挡火一次；巨剑可作梁下杠杆。');s.message='护符亮起三道刻痕。你把卷轴塞进衣袋，扛起巨剑。井下传来敲击声，有人还活着。';break;
+ case 'loot':s.loot=true;s.charges=3;s.scroll=true;s.sword=true;note('遗物：护符可托起重物，共三次，用于救人、排烟、开顶，或取回九层名册。若想完成四件事，救人、排烟、开顶中至少一件须另想办法。卷轴挡火一次；巨剑可作梁下杠杆。');s.message='护符亮起三道刻痕。你把卷轴塞进衣袋，扛起巨剑。'+(s.witness?'井口已经安静下来，抄写员获救时留下的手印还在。':'井下传来敲击声，有人还活着。');break;
  case 'rescueCharm':s.charges--;s.witness=true;s.message='一道刻痕熄灭，吊架连人浮回井口。抄写员伏在石板上喘气，指给你看账册的核验暗记。';break;
- case 'rescueRope':s.rope=false;s.witness=true;s.message='你把绳拴在井口，用符文浮到吊架旁。绳结承住两次攀爬，抄写员终于翻过井沿；绳留在那里供后来人使用。';break;
+ case 'rescueRope':s.rope=false;s.witness=true;s.message='你把绳拴在井口，用符文浮到吊架旁，将绳系在抄写员腰间。浮空结束后，绳索承住重量；你沿绳扶他爬上井沿，把绳留给后来人。';break;
  case 'clearDrain':s.drainCleared=true;s.message='你从检修口刷出黏稠的沉积物，水终于流过槽底。时光杖上的光晃了一下。';note('因果：过去清理排烟槽，现在可以转动检修轮打开重闸。');break;
- case 'ventCharm':s.charges--;s.vented=true;s.message='一道刻痕熄灭，铁闸翻起，卡进止回槽。井里传来贯通十余层的风声。';break;
+ case 'ventCharm':s.charges--;s.vented=true;s.message='一道刻痕熄灭，铁闸翻起，卡进止回槽。热烟涌进排烟井，风声沿着井壁向上传去。';break;
  case 'ventWheel':s.vented=true;s.message='你双手转动检修轮，铁闸一寸寸抬高。热风穿井而过，带走塔顶积烟。';break;
  case 'recoverNames':s.charges--;s.memorial=true;note('罹难者名册：你花掉一道护符刻痕，从九层铁床架下取回姓名与归乡地址。这些名字将随你离塔，不是放飞或订约的必要条件。');s.message='一道刻痕熄灭，沉重的床架离开地面。你从下面抽出薄薄的名册，封皮内侧写着：若有人回来，请代我们报信。你把它贴身收好。';break;
- case 'shield':s.shield=true;s.message='你取下耐火盾，扣紧里侧皮带。盾后那一小块墙仍保持原色。';break;
- case 'silenceBell':if(!s.shield)s.scroll=false;s.bellSilent=true;s.message='驯龙者试喷的火擦过你的防护。你趁他收回喷口，卸下铃舌，投入熄灭的炉膛。头顶的鳞片不再应声抽动。';note('因果：过去的驯龙铃已拆，现在的龙不再受铃声驱使。');break;
+ case 'shield':s.shield=true;s.message='你取下防火盾，扣紧里侧皮带。盾后那一小块墙仍保持原色。';break;
+ case 'silenceBell':if(!s.shield)s.scroll=false;s.bellSilent=true;s.message='驯龙者试喷的火擦过你的防护。你趁他收回喷口，摘下铜铃，连同铃舌投入熄灭的炉膛。头顶的鳞片不再应声抽动。';note('因果：过去的驯龙铃已拆，现在的龙不再受铃声驱使。');break;
  case 'promise':s.promise=true;s.message='你蹲在梁边，等它说完。它问外面有没有铁钩。你答应让它亲自选择，幼龙终于松开紧抓木梁的爪。';note('幼龙记住你的承诺：让它亲自选择去处。放飞前还要开顶、排烟、解除铃声；也可找证人撤令，与它订约。');break;
  case 'wedgeSword':s.sword=false;s.beamWedged=true;s.message='你照图把巨剑推入支点，剑身弯出一道弧。梁抬起半寸；剑不能再拔走，下一步可沿侧墙扳梁。';break;
  case 'leverBeam':s.exitOpen=true;s.message='你沿侧墙压下剑柄，松动的梁翻向外侧。剑与木梁一同卡牢，天空露出宽阔的一角。';break;
- case 'openCharm':s.charges--;s.exitOpen=true;s.message='一道刻痕熄灭。重梁缓缓浮起，翻到外墙上卡住。诺斯塔望着新露出的天空，还在等你回来。';break;
+ case 'openCharm':s.charges--;s.exitOpen=true;s.message='一道刻痕熄灭。重梁缓缓浮起，翻到外墙上卡住。诺斯塔望着新露出的天空，双翼仍收在身侧。';break;
  case 'decree':s.decree=true;s.message='你念出核验暗记，翻开伪造的署名。驯龙者按住首领的手，把出征令划去；你带走盖过更正印的副本。';note('因果：袭村令已撤销。获救证人与更正副本能让龙相信，留下也不必再成为兵器。');break;
  case 'free':s.ending='free';s.message='井风吹散最后一团烟。诺斯塔等了一会儿，没有铃声传来。它自己伸开双翼，越过你撑开的屋梁。你伏在石墙边，再抬头时，天空里的影子已不必躲避任何铁钩。';break;
- case 'pact':s.ending='pact';s.message='你把撤令副本放在诺斯塔面前，抄写员念出那枚更正印。它将金币推向梯口：“修楼梯。让他们能上来。”塔成了避难所；去留由它自己决定，铜铃再也没有响过。';break;
+ case 'pact':s.ending='pact';s.message='你把撤令副本放在诺斯塔面前，照着抄写员教的暗记，向它说明更正印的来历。它将金币推向梯口：“修楼梯。让他们能上来。”此后，人们用这些财宝修缮楼梯、烟道和塔顶，把塔改成避难所。诺斯塔自愿留下，铜铃再也没有响过。';break;
  case 'treasure':if(!s.shield)s.scroll=false;s.ending='treasure';s.message='防护挡住扑来的龙火。你抱着一袋金币退下梯子，一直走到塔门外。'+(s.exitOpen?'屋顶已经敞开，但你没有留下等诺斯塔作出选择。':'回头望去，屋顶仍压在诺斯塔背上。');break;
  case 'leave':s.ending='leave';s.message='你走回塔门，把沿途所见记在空白页上。风翻动纸角；塔里还有没有做完的事，但这次旅程到这里为止。';break;
  }
@@ -109,27 +109,33 @@ setup.towerObjective = s => {
  if(s.ending)return '旅程已结束。你的选择与途中留下的改变保存在手记里。';
  if(s.version===1)return '旧版旅程：读养龙书、倾听幼龙，再用浮空符文或护符展示出口。';
  if(!s.promise)return '第一幕 · 读养龙书，调查塔的构造与命令；到塔顶的过去听幼龙说完。';
- if(!s.exitOpen||!s.vented||!s.bellSilent)return '第二幕 · 为自由准备出口、排烟并拆除驯龙铃；也可救人取证，撤销袭村令。';
- return '第三幕 · 回到现在的塔冠，让诺斯塔决定去处。';
+ if(!s.bellSilent||!((s.exitOpen&&s.vented)||(s.decree&&s.witness)))return '第二幕 · 放飞需要开顶、排烟；订约需要救人取证、撤销袭村令。两条路都要拆除驯龙铃。';
+ return '第三幕 · 已有一条帮助诺斯塔的路线准备就绪。回到现在的塔冠，选择如何结束旅程。';
 };
 setup.towerBlocked = s => {
  if(s.ending)return [];
  if(s.version===1)return [setup.towerRoomsLegacy[s.floor].hint];
  const b=[];
  if(s.floor===0&&s.era==='present')b.push('断阶无法登上；转动杖回到过去。');
- if(s.floor===5&&s.era==='past'&&!s.guards)b.push('卫兵挡住上楼与当面对证。送热饭、用浮空符文放侧梯，或切换现在绕过。');
+ if(s.floor===5&&s.era==='past'&&!s.guards)b.push('卫兵挡住上楼与当面对证。送热饭或用浮空符文放下侧梯，可取得通行；切到现在只能绕路上楼，回过去对证仍需通行。');
  if(s.floor===6&&s.era==='present'&&!s.witness)b.push('井中抄写员：护符可托起吊架；不用护符则需三层符文与六层现在的旧绳。');
  if(s.floor===7&&!s.vented)b.push('排烟重闸：现在耗一次护符；或五层现在取长刷→本层过去清槽→本层现在转检修轮。');
- if(s.floor===8&&s.era==='present'&&!s.memorial)b.push(s.charges>0?'可选名册：铁床架下的姓名只能耗一次护符取回。四处用途只有三次；若取名册，救人、排烟、开顶中至少一处需用替代办法。':'可选名册仍压在铁床架下：护符已耗尽，无法取回；所有主线结局仍可完成。');
- if(s.floor===9&&s.era==='past')b.push('驯龙者阻止上楼；可切到现在通行。拆铜铃须防火盾或一次卷轴，盾在九层过去。');
+ if(s.floor===8&&s.era==='present'&&!s.memorial)b.push(!s.loot?'可选名册需要一次护符。你还未领取遗物，可到七层现在寻找；护符共三次，请为其他重物留好替代办法。':s.charges>0?'可选名册：铁床架下的姓名只能耗一次护符取回。四处用途只有三次；若取名册，救人、排烟、开顶中至少一处需用替代办法。':'可选名册仍压在铁床架下：护符已耗尽，无法取回；这不影响主线，满足各路线条件后仍可完成结局。');
+ if(s.floor===9&&s.era==='past')b.push('驯龙者仍阻止上楼；可切到现在通行。'+(s.bellSilent?'铜铃已经拆下，不必再冒火靠近。':'拆铜铃须防火盾或一次卷轴，盾在九层过去。'));
  if(s.floor===10&&s.era==='present'){
   const missing=[];
-  if(!s.promise)missing.push('二层养龙书与过去幼龙的承诺');
-  if(!s.exitOpen)missing.push('开顶：一次护符，或四层结构图＋巨剑楔梁后再扳梁');
+  if(!s.promise)missing.push(s.book?'回到本层过去，倾听幼龙并许下承诺':'先读二层养龙书，再到本层过去倾听幼龙');
+  if(!s.exitOpen)missing.push(s.beamWedged?'开顶：巨剑已楔好，继续扳开重梁':'开顶：一次护符，或四层结构图＋七层遗物巨剑，先楔梁再扳梁');
   if(!s.vented)missing.push('八层打开排烟闸');
   if(!s.bellSilent)missing.push('十层过去用防火道具拆铃');
   if(missing.length)b.push('放飞尚缺：'+missing.join('；')+'。');
-  if(!s.decree)b.push('订约路线：四层过去抄账册、七层现在救抄写员，再到六层过去取得通行并当面对证。也需幼龙承诺与拆铃。');
+  const pactMissing=[];
+  if(!s.promise)pactMissing.push(s.book?'到本层过去向幼龙许诺':'读二层养龙书，再到本层过去向幼龙许诺');
+  if(!s.witness)pactMissing.push('到七层现在救下抄写员');
+  if(!s.ledger)pactMissing.push('到四层过去抄下出征账册');
+  if(!s.decree)pactMissing.push('取得六层过去的通行后，用账册与暗记当面对证、撤销袭村令');
+  if(!s.bellSilent)pactMissing.push('到十层过去用防火道具拆铃');
+  if(pactMissing.length)b.push('订约尚缺：'+pactMissing.join('；')+'。这条路线不要求开顶或排烟。');
  }
  return b;
 };
@@ -143,8 +149,8 @@ setup.towerInventory = s => {
  if(s.meal)items.push({label:'热饭',detail:'送给六层过去的卫兵'});
  if(s.rope)items.push({label:'旧绳',detail:'与符文配合救人，救人后留在井口'});
  if(s.brush)items.push({label:'烟罩长刷',detail:'清理八层过去的排烟槽'});
- if(s.memorial)items.push({label:'罹难者名册',detail:'已耗一次护符取回的可选纪念物；离塔后把名字与消息带回去'});
- if(s.ledger)items.push({label:'账册抄本',detail:'需要获救抄写员的暗记来揭穿伪令'});
+ if(s.memorial)items.push({label:'罹难者名册',detail:'记着罹难者姓名与归乡地址；离塔后可逐一报信'});
+ if(s.ledger)items.push({label:'账册抄本',detail:s.decree?'已用于揭穿伪令，保留作为证据':s.witness?'已掌握核验暗记，可到六层过去当面对证':'需要获救抄写员的暗记来核验署名'});
  if(s.decree)items.push({label:'撤令副本',detail:'首领不能再命令诺斯塔袭村'});
  return items;
 };

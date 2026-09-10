@@ -4,121 +4,121 @@
 window.ChargenRounds = [
 	{
 		title: '属性倾向',
-		intro: '命运的骰子尚未落下，你的天赋却已显出轮廓。选择一种属性的排布（标准数组 15/14/13/12/10/8）：',
+		intro: '旅途尚未开始，你的长处已初见端倪。选择一组起始属性；数值越高，相关检定越有利。',
 		options: [
 			{
-				name: '勇武型', desc: '你的手臂比头脑更早给出答案。', effect: '力15 体14 敏13 感12 智10 魅8',
+				name: '勇武型', desc: '遇到险阻，你习惯站到最前面，用力量打开一条路。', effect: '力量15 体质14 敏捷13 感知12 智力10 魅力8',
 				apply(pc) { pc.abilities = { str: 15, con: 14, dex: 13, wis: 12, int: 10, cha: 8 }; },
 			},
 			{
-				name: '灵巧型', desc: '风穿过指缝时，你已经不在原地。', effect: '敏15 体14 力13 魅12 感10 智8',
+				name: '灵巧型', desc: '你步履轻捷，习惯在危险逼近前寻找落脚之处。', effect: '敏捷15 体质14 力量13 魅力12 感知10 智力8',
 				apply(pc) { pc.abilities = { dex: 15, con: 14, str: 13, cha: 12, wis: 10, int: 8 }; },
 			},
 			{
-				name: '博学型', desc: '你读过的书，比多数人走过的路还多。', effect: '智15 感14 敏13 体12 力10 魅8',
+				name: '博学型', desc: '漫长的阅读教会你辨认符号，也教会你留意被忽略的细节。', effect: '智力15 感知14 敏捷13 体质12 力量10 魅力8',
 				apply(pc) { pc.abilities = { int: 15, wis: 14, dex: 13, con: 12, str: 10, cha: 8 }; },
 			},
 		],
 	},
 	{
 		title: '出身背景',
-		intro: '没人是一夜之间走进迷雾的。你出发之前，是谁？（背景决定属性加成与起始金币——SRD 5.2：+2/+1）',
+		intro: '在成为旅人之前，你靠什么生活？出身会带来属性加成、技能熟练和起始金币。',
 		options: [
 			{
-				name: '学者', desc: '烛光下的手稿与尘埃，是你最熟悉的气味。', effect: '智+2 感+1｜熟练：历史、调查｜金币 10',
+				name: '学者', desc: '你曾在烛光下整理残卷，从褪色的字迹里追索往事。', effect: '智力+2 感知+1｜熟练：历史、调查｜金币 10',
 				apply(pc) { pc.abilities.int += 2; pc.abilities.wis += 1; pc.skills.push('历史', '调查'); pc.gold += 10; pc.bgLabel = '学者'; },
 			},
 			{
-				name: '佣兵', desc: '你替人扛过枪，也替人挡过刀，价钱好商量。', effect: '力+2 体+1｜熟练：运动、恐吓｜金币 15',
+				name: '佣兵', desc: '你护送过商队，也守过城门，知道一份报酬背后有多少风险。', effect: '力量+2 体质+1｜熟练：运动、恐吓｜金币 15',
 				apply(pc) { pc.abilities.str += 2; pc.abilities.con += 1; pc.skills.push('运动', '恐吓'); pc.gold += 15; pc.bgLabel = '佣兵'; },
 			},
 			{
-				name: '修行者', desc: '山门塌了以后，你一路化缘到这座边镇。', effect: '感+2 魅+1｜熟练：洞悉、医药｜金币 12',
+				name: '修行者', desc: '离开隐修之所后，你一路行医问路，来到这座边镇。', effect: '感知+2 魅力+1｜熟练：洞悉、医药｜金币 12',
 				apply(pc) { pc.abilities.wis += 2; pc.abilities.cha += 1; pc.skills.push('洞悉', '医药'); pc.gold += 12; pc.bgLabel = '修行者'; },
 			},
 		],
 	},
 	{
 		title: '物种',
-		intro: '血液里的东西，雾也认得。',
+		intro: '你的族裔赋予你不同的禀赋。它们会在森林的险境中派上用场。',
 		options: [
 			{
-				name: '人类', desc: '短命、贪婪、勇敢——意外地适应一切。', effect: '行囊金币 +10',
+				name: '人类', desc: '你没有漫长的寿命，却愿意为眼前的机遇做足准备。', effect: '起始金币 +10',
 				apply(pc) { pc.gold += 10; pc.speciesLabel = '人类'; pc.speciesKey = 'human'; },
 			},
 			{
-				name: '精灵', desc: '你的瞳孔在黑暗里泛起银光。', effect: '黑暗视觉：察觉检定优势；摸黑不易受伤',
+				name: '精灵', desc: '幽暗之中，你仍能辨清近处的轮廓。', effect: '黑暗视觉：洞穴察觉检定有优势；摸黑入洞不受碰撞伤害',
 				apply(pc) { pc.speciesLabel = '精灵'; pc.speciesKey = 'elf'; },
 			},
 			{
-				name: '矮人', desc: '石头的韧性在你骨子里。', effect: '坚韧：受毒性/冲击伤害 -2',
+				name: '矮人', desc: '长久与岩石相伴，你也练就了如磐石般的韧劲。', effect: '鲁莽挑战中受到的伤害 -2（最终至少受 1 点伤害）',
 				apply(pc) { pc.speciesLabel = '矮人'; pc.speciesKey = 'dwarf'; },
 			},
 		],
 	},
 	{
 		title: '职业',
-		intro: '最后一课：靠什么活下去？（决定生命值与技能熟练）',
+		intro: '你最擅长以什么本领应对险境？职业决定起始生命值和技能熟练。',
 		options: [
 			{
-				name: '战士', desc: '剑刃是你与世界谈判的方式。', effect: 'HP 10+体质调整值｜熟练：运动',
+				name: '战士', desc: '你熟悉兵刃的分量，也习惯在险境中稳住阵脚。', effect: '生命上限：10 + 体质调整值｜熟练：运动',
 				apply(pc) { pc.max_hp = 10 + Rules.mod(pc.abilities.con); pc.skills.push('运动'); pc.classLabel = '战士'; },
 			},
 			{
-				name: '游荡者', desc: '锁、影子、人心——都是你的专业领域。', effect: 'HP 8+体质调整值｜熟练：体操、隐匿｜金币 +5',
+				name: '游荡者', desc: '你善于保持平衡、隐匿行踪，在狭窄的退路上寻找生机。', effect: '生命上限：8 + 体质调整值｜熟练：体操、隐匿｜金币 +5',
 				apply(pc) { pc.max_hp = 8 + Rules.mod(pc.abilities.con); pc.skills.push('体操', '隐匿'); pc.gold += 5; pc.classLabel = '游荡者'; },
 			},
 			{
-				name: '巫师', desc: '你与迷雾说话，用的是它听得懂的语言。', effect: 'HP 6+体质调整值｜熟练：奥秘、历史',
+				name: '巫师', desc: '你钻研古老传说与奥秘，试着读懂常人眼中的怪事。', effect: '生命上限：6 + 体质调整值｜熟练：奥秘、历史',
 				apply(pc) { pc.max_hp = 6 + Rules.mod(pc.abilities.con); pc.skills.push('奥秘', '历史'); pc.classLabel = '巫师'; },
 			},
 		],
 	},
 	{
 		title: '技艺',
-		intro: '路费不多，手艺凑数。再学两样本事：',
+		intro: '漫长的旅途让你多学了一些本事。选择一组熟练技能；重复获得的熟练不会叠加。',
 		options: [
-			{ name: '荒野技艺', desc: '你认得哪些浆果能吃，哪些脚印在说谎。', effect: '熟练：生存、察觉',
+			{ name: '荒野技艺', desc: '你认得可食的浆果，也能从草叶与脚印间察觉动静。', effect: '熟练：生存、察觉',
 				apply(pc) { pc.skills.push('生存', '察觉'); } },
-			{ name: '市井技艺', desc: '三句话套出底价，一个眼神结束谈判。', effect: '熟练：游说、欺瞒',
+			{ name: '市井技艺', desc: '你熟悉街巷里的讨价还价，知道何时直言，何时迂回。', effect: '熟练：游说、欺瞒',
 				apply(pc) { pc.skills.push('游说', '欺瞒'); } },
-			{ name: '秘闻技艺', desc: '你收集咒语残页，像别人收集欠条。', effect: '熟练：奥秘、自然',
+			{ name: '秘闻技艺', desc: '你收集古老咒语的残页，也留心草木与异象的联系。', effect: '熟练：奥秘、自然',
 				apply(pc) { pc.skills.push('奥秘', '自然'); } },
 		],
 	},
 	{
 		title: '行囊',
-		intro: '门口的驮马只等你一个包裹：',
+		intro: '行囊里还能放下一份装备。你准备带上什么？',
 		options: [
-			{ name: '火把与绳索', desc: '光明和退路，一样一份。', effect: '火把（可入洞穴）｜绳索（吊桥检定优势）',
+			{ name: '火把与绳索', desc: '一支照亮脚下，一卷系住退路。', effect: '火把：照明探洞｜绳索：吊桥体操检定有优势',
 				apply(pc) { pc.has_torch = true; pc.has_rope = true; pc.gear.push('火把', '绳索'); } },
-			{ name: '长剑', desc: '擦拭了十年的家传剑刃。', effect: '战斗检定 +2',
+			{ name: '长剑', desc: '家传的剑刃保养得当，握柄已被岁月磨得光滑。', effect: '对抗哥布林时，运动检定 +2',
 				apply(pc) { pc.gear.push('长剑'); } },
-			{ name: '疗伤药膏', desc: '气味刺鼻，但管用。', effect: '首次受伤后自动回复 4 点生命',
+			{ name: '疗伤药膏', desc: '草药气味刺鼻，是你留给伤口的一份准备。', effect: '首次受伤且存活时，自动恢复最多 4 点生命；仅用一次',
 				apply(pc) { pc.gear.push('药膏'); } },
 		],
 	},
 	{
 		title: '起源专长',
-		intro: '在你成为你之前，有件事早已注定：',
+		intro: '那些日积月累的习惯，已成了你的长处。选择一项专长：',
 		options: [
-			{ name: '警觉', desc: '你睡觉都睁着一只眼。', effect: '察觉检定优势',
+			{ name: '警觉', desc: '即使歇脚，你也不忘留意身边细微的声响。', effect: '洞穴察觉检定有优势（与精灵黑暗视觉不叠加）',
 				apply(pc) { pc.feats = ['警觉']; } },
-			{ name: '坚韧', desc: '打不倒你的，会让你更难打倒。', effect: '生命值上限 +2',
+			{ name: '坚韧', desc: '漫长的劳作与跋涉，让你比旁人更经得住伤痛。', effect: '生命值上限 +2',
 				apply(pc) { pc.feats = ['坚韧']; pc.max_hp += 2; } },
-			{ name: '巧手', desc: '你的手指比大多数人的舌头还利索。', effect: '金币 +5',
+			{ name: '巧手', desc: '灵巧的双手替你做成过不少小活，也攒下一点路费。', effect: '金币 +5',
 				apply(pc) { pc.feats = ['巧手']; pc.gold += 5; } },
 		],
 	},
 	{
 		title: '命运烙印',
-		intro: '车卡的最后一格留给命运。写下你的：',
+		intro: '最后，选一种伴你上路的信念或禀赋：',
 		options: [
-			{ name: '勇气', desc: '疼，但你从不后退半步。', effect: '鲁莽挑战受伤 -1',
+			{ name: '勇气', desc: '恐惧并未消失，但你学会了在疼痛中站稳。', effect: '鲁莽挑战中受到的伤害 -1（最终至少受 1 点伤害）',
 				apply(pc) { pc.flags.courage = true; } },
-			{ name: '机运', desc: '命运偏爱你一点点。', effect: '所有检定与豁免 +1',
+			{ name: '机运', desc: '每逢紧要关头，你似乎总能多得一点好运。', effect: '所有检定与豁免 +1',
 				apply(pc) { pc.flags.luck = true; } },
-			{ name: '学识', desc: '你知道宝物通常藏在哪里。', effect: '搜刮战利品时金币 +10',
+			{ name: '学识', desc: '旧书里的记载，让你知道该往宝箱的哪处夹层看。', effect: '发现洞穴宝箱时，额外获得 10 枚金币',
 				apply(pc) { pc.flags.lore = true; } },
 		],
 	},
@@ -150,20 +150,20 @@ window.Chargen = {
 window.ChargenPresets = [
 	{
 		name: '铁卫',
-		desc: '矮人佣兵出身的战士。话不多，剑很稳，桥塌了也砸不死。',
-		summary: '力17 体15｜HP 14｜火把与绳索｜坚韧 · 勇气',
+		desc: '矮人战士，曾以佣兵为生。沉稳耐伤，出发前总会备好照明与绳索。',
+		summary: '力量17 体质15｜生命14｜火把与绳索｜坚韧 · 勇气',
 		picks: [0, 1, 2, 0, 0, 0, 1, 0],
 	},
 	{
 		name: '影手',
-		desc: '精灵游荡者，修行者出身。眼观六路，擅长把危机掐灭在发生之前。',
-		summary: '敏15 魅13｜HP 10｜长剑(+2)｜警觉 · 机运(+1)',
+		desc: '精灵游荡者，曾在隐修之所生活。步履轻巧、耳目敏锐，愿好运与剑刃伴你过关。',
+		summary: '敏捷15 魅力13｜生命10｜长剑：对抗哥布林检定+2｜警觉 · 机运：检定与豁免+1',
 		picks: [1, 2, 1, 1, 1, 1, 0, 1],
 	},
 	{
 		name: '秘典',
-		desc: '人类学者出身的巫师。体质是硬伤，但你知道所有值钱的东西藏在哪。',
-		summary: '智17 感15｜HP 7｜药膏(自动回4)｜巧手 · 学识',
+		desc: '人类巫师，出身学者。身板单薄，却善于从旧闻中找到线索，行囊里备着应急药膏。',
+		summary: '智力17 感知15｜生命7｜药膏：受伤存活后恢复最多4点｜巧手 · 学识',
 		picks: [2, 0, 0, 2, 2, 2, 2, 2],
 	},
 ];
