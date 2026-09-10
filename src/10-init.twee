@@ -21,9 +21,9 @@
 	<<if $pc.gear.includes("药膏") and not $pc.salve_used and $pc.hp gt 0>>
 		<<set $pc.salve_used to true>>
 		<<set $pc.hp to Math.min($pc.max_hp, $pc.hp + 4)>>
-		<span class="damage-flash">''你受到了 $args[0] 点伤害！''（药膏自动生效，回复 4 点生命）</span>
+		<span class="damage-flash">''你受到 $args[0] 点伤害。''（药膏已用尽，自动恢复最多 4 点生命，不超过生命上限）</span>
 	<<else>>
-		<span class="damage-flash">''你受到了 $args[0] 点伤害！''</span>
+		<span class="damage-flash">''你受到 $args[0] 点伤害。''</span>
 	<</if>>
 	<<if $pc.hp lte 0>>
 		<<goto "结局 死亡">>

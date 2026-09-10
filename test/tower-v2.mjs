@@ -105,3 +105,43 @@ for(const ending of ['treasure','leave','pact']){
  assert.equal(m.ending,ending);assert(m.message.includes('名册带回去'));terminal(m);
 }
 console.log('✓ Four charm uses compete for three charges; memorial forces a manual roof, survives save, and pays off in all endings');
+
+// Copy follows reachable states: an unclaimed charm is not exhausted, and a
+// rescued witness must not reappear in the well when relics are collected later.
+s=go(newTower(),8);
+assert(api.towerBlocked(s).some(t=>t.includes('还未领取遗物')));
+assert(!api.towerBlocked(s).some(t=>t.includes('护符已耗尽')));
+s=take(s,6,'present','loot');s=go(s,8);
+assert(api.towerBlocked(s).some(t=>t.includes('四处用途只有三次')));
+s=take(newTower(),2,'present','rune');s=take(s,5,'present','rope');
+s=take(s,6,'present','rescueRope');s=step(s,'loot');
+assert.equal(s.witness,true);assert.equal(s.charges,3);
+assert(!s.message.includes('井下传来敲击声'));
+vm.runInContext(readFileSync('src/49-tower-world.twee','utf8').split('\n').slice(1).join('\n'),context);
+assert(api.towerDescription(s).includes('沿楼梯离塔'));
+assert(!api.towerDescription(s).includes('井下有人喊你'));
+const copyState=JSON.stringify(s);
+api.towerDescription(s);api.towerBlocked(s);
+assert.equal(JSON.stringify(s),copyState,'Narrative queries mutated state');
+console.log('✓ Copy distinguishes unclaimed/spent charges and respects rescue-before-relics order');
+
+// Endgame guidance follows either supported route, including pact without roof
+// work. Preparing a route changes the guidance, never the action conditions.
+s=knowledge();s=step(s,'rescueCharm');s=take(s,3,'past','ledger');
+s=take(s,5,'past','float');s=step(s,'decree');s=silence(promise(s));s=go(s,10);
+assert(actions(s).some(a=>a.id==='pact'));assert(!actions(s).some(a=>a.id==='free'));
+assert(api.towerObjective(s).startsWith('第三幕'));
+assert(!api.towerBlocked(s).some(t=>t.startsWith('订约尚缺')));
+assert(api.towerBlocked(s).some(t=>t.startsWith('放飞尚缺')));
+s=take(knowledge(),10,'present','wedgeSword');
+assert(api.towerBlocked(s).some(t=>t.includes('巨剑已楔好')));
+// Legacy projections acknowledge collected items without changing old saves or
+// the exact sketch note used as the legacy completion marker.
+let legacy=api.newTowerLegacy();
+legacy=run(legacy,['shift','up','up','up','sketch']);
+assert.equal(act(legacy,'sketch'),legacy);
+legacy=run(legacy,['up','up','shift','up','loot']);
+const legacySnapshot=JSON.stringify(legacy);
+assert(api.towerDescription(legacy).includes('已经收走'));
+assert.equal(JSON.stringify(legacy),legacySnapshot);
+console.log('✓ Both ending routes receive accurate guidance; legacy revisits preserve save state and sketch identity');

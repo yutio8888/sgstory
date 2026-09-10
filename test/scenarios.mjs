@@ -87,7 +87,7 @@ await scenario('路线B：摸黑+断桥 → 结局「空手而归」', async () 
 	const pc = () => pcOf(w);
 	if (pc().max_hp !== 7) throw new Error(`巫师 HP 应为 7（6+体12→+1），实际 ${pc().max_hp}`);
 	await clickLabel('推门出发，走进暮色');
-	await clickLabel('摸黑走进山脚的洞穴（很危险）');
+	await clickLabel('摸黑进入洞穴（难以探索，可能受伤）');
 	if (pc().hp !== 5) throw new Error(`摸黑受伤后应 5（7-2），实际 ${pc().hp}`);
 	await clickLabel('改走吊桥');
 	if (pc().hp !== 1) throw new Error(`断桥受伤后应 1（5-4），实际 ${pc().hp}`);
@@ -125,10 +125,10 @@ await scenario('路线D：两次鲁莽挑战 → 结局「死亡」', async () =
 	const pc = () => pcOf(w);
 	if (pc().max_hp !== 12) throw new Error(`战士 HP 应为 12（无坚韧），实际 ${pc().max_hp}`);
 	await clickLabel('推门出发，走进暮色');
-	await clickLabel('对着雾气大吼，宣示存在');
+	await clickLabel('向雾中大吼（会受伤，可能致命）');
 	if (pc().hp !== 6) throw new Error(`第一次豁免失败后应 6（12-6），实际 ${pc().hp}`);
-	await clickLabel('明智起见，还是选条正经路');
-	await clickLabel('对着雾气大吼，宣示存在');
+	await clickLabel('退回岔路，重新选择');
+	await clickLabel('向雾中大吼（会受伤，可能致命）');
 	if (passageOf(w) !== '结局 死亡') throw new Error(`应死亡，当前：${passageOf(w)}`);
 	if (pc().hp !== 0) throw new Error(`血量应归零，实际 ${pc().hp}`);
 });
@@ -145,7 +145,7 @@ await scenario('路线E：买火把+战斗受创 → 结局「月光倾城」', 
 	await clickLabel('回到大厅');
 	await clickLabel('推门出发，走进暮色');
 	await clickLabel('打着火把，走进山脚的洞穴');
-	await clickLabel('拔剑！');
+	await clickLabel('迎战（运动检定，失败会受伤）');
 	if (pc().hp !== 10) throw new Error(`战斗受伤后应 10（14-4），实际 ${pc().hp}`);
 	if (!amuletOf(w)) throw new Error('战斗获胜应获得护身符');
 	await clickLabel('捡起护身符，顺着风声穿过后洞');

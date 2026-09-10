@@ -19,8 +19,8 @@
 <p class="tower-kicker">旅程终章</p>
 <h2>结局 · <<print setup.towerEndingTitle($tower)>></h2>
 <p><<print $tower.message>></p>
-<p class="nousta-small">探索了 <<print $tower.visited.length>> / 22 处过去与现在的场景，留下 <<print $tower.notes.length>> 条手记。</p>
-<p class="nousta-small">这份手记仍属于你。可用侧栏回退，重访最后的选择。</p>
+<p class="nousta-small">探索了 <<print $tower.visited.length>> / 22 个时态场景，留下 <<print $tower.notes.length>> 条手记。</p>
+<p class="nousta-small">想试试另一种选择，可用侧栏的回退按钮返回结局前。需要保留这次旅程，请先存档。</p>
 </section>
 <<else>>
 <div class="tower-objective"><span class="tower-kicker">此刻的线索</span><p><<print setup.towerObjective($tower)>></p></div>
@@ -38,13 +38,13 @@
 <</capture>>
 <</for>>
 </nav>
-<details class="tower-panel tower-hints"><summary>需要一点提示？ <span>含解谜方向</span></summary><p><<print _room.hint>></p>
+<details class="tower-panel tower-hints"><summary>查看解谜提示 <span>会说明解法与缺少的条件</span></summary><p><<print _room.hint>></p>
 <<set _blocked to setup.towerBlocked($tower)>>
 <<if _blocked.length>><ul><<for _reason range _blocked>><li><<print _reason>></li><</for>></ul><</if>>
 </details>
 <</if>>
-<details class="tower-panel"><summary>玩法与改编来源</summary><p>留意同一间屋子在过去与现在的不同，就能找到登塔的办法。任何角色都能走完本篇，关键线索无需掷骰；切换时代、查看手记都不扣生命或金币。物品和手记随你往返，不必重新收集。行动下方会标明代价。侧栏可以存档、读档或回退，抵达结局后也能回退尝试其他选择。</p><p>改编自 Jaclyn Lewis 的 <a href="https://jaclynlewis.itch.io/ascend-noustas-tower" target="_blank" rel="noopener noreferrer">Ascend Nousta’s Tower</a>（2023）。中文叙事、路线与结局有改写；本篇改编内容采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>。</p></details>
-<<if $tower.ending>><div class="nousta-start-link"><<link "重新开始">><<run Engine.restart()>><</link>></div><</if>>
+<details class="tower-panel"><summary>玩法与改编来源</summary><p>留意同一间屋子在过去与现在的不同，就能找到登塔的办法。任何角色都能走完本篇，关键线索无需掷骰；切换时代、查看手记都不扣生命或金币。随身物品和手记会跟你往返，已用掉的物品不会因切换时代而恢复。<<if $tower.version === 2>>留在机关上的绳索或巨剑也不会回到行囊。行动卡片会标明消耗，防火盾可以重复使用。<<else>>行动文字会注明消耗：符文优先于护符，防火盾优先于卷轴。<</if>>侧栏可以存档、读档或回退，抵达结局后也能回退尝试其他选择。</p><p>改编自 Jaclyn Lewis 的 <a href="https://jaclynlewis.itch.io/ascend-noustas-tower" target="_blank" rel="noopener noreferrer">Ascend Nousta’s Tower</a>（2023）。中文叙事、路线与结局有改写；本篇改编内容采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>。</p></details>
+<<if $tower.ending>><div class="nousta-start-link"><<link "返回标题，重新开始">><<run Engine.restart()>><</link>></div><</if>>
 </main>
 <aside class="tower-journal" aria-label="探险记录">
 <details class="tower-panel tower-map-panel" open><summary>探索地图 · <<print $tower.visited.length>> / 22</summary>
@@ -54,7 +54,7 @@
 <li @class="_i === $tower.floor ? 'is-current' : ''" @aria-current="_i === $tower.floor ? 'location' : 'false'">
 <span class="tower-map-number"><<print String(_i + 1).padStart(2,'0')>></span><span class="tower-map-name"><<if $tower.visited.includes(_i + ':past') or $tower.visited.includes(_i + ':present')>><<print _rooms[_i].name>><<else>>未知的房间<</if>></span><span class="tower-map-dots"><span @aria-label="$tower.visited.includes(_i + ':past') ? '过去已探索' : '过去未探索'"><<print $tower.visited.includes(_i + ':past') ? '●' : '○'>></span> <span @aria-label="$tower.visited.includes(_i + ':present') ? '现在已探索' : '现在未探索'"><<print $tower.visited.includes(_i + ':present') ? '●' : '○'>></span></span></li>
 <</for>></ol>
-<p class="nousta-small">上下楼保留时代；转动杖头留在同层。</p>
+<p class="nousta-small">每层有过去、现在两个场景。上下楼不改变时代；转动时光杖不改变楼层。</p>
 </details>
 <details class="tower-panel" open><summary>随身物品</summary>
 <ul class="tower-inventory"><<for _item range setup.towerInventory($tower)>><li><strong><<print _item.label>></strong><span><<print _item.detail>></span></li><</for>></ul>
